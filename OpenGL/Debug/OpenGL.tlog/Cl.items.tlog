@@ -1,6 +1,8 @@
 C:\Users\kanak\Dev\OpenGL\OpenGL\src\IndexBuffer.cpp;C:\Users\kanak\Dev\OpenGL\OpenGL\Debug\IndexBuffer.obj
 C:\Users\kanak\Dev\OpenGL\OpenGL\src\Renderer.cpp;C:\Users\kanak\Dev\OpenGL\OpenGL\Debug\Renderer.obj
 C:\Users\kanak\Dev\OpenGL\OpenGL\src\Shader.cpp;C:\Users\kanak\Dev\OpenGL\OpenGL\Debug\Shader.obj
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\Test.cpp;C:\Users\kanak\Dev\OpenGL\OpenGL\Debug\Test.obj
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\TestClearColour.cpp;C:\Users\kanak\Dev\OpenGL\OpenGL\Debug\TestClearColour.obj
 C:\Users\kanak\Dev\OpenGL\OpenGL\src\Texture.cpp;C:\Users\kanak\Dev\OpenGL\OpenGL\Debug\Texture.obj
 C:\Users\kanak\Dev\OpenGL\OpenGL\src\vendor\glm\detail\glm.cpp;C:\Users\kanak\Dev\OpenGL\OpenGL\Debug\glm.obj
 C:\Users\kanak\Dev\OpenGL\OpenGL\src\vendor\glm\glm.cppm;C:\Users\kanak\Dev\OpenGL\OpenGL\Debug\glm.cppm.obj
