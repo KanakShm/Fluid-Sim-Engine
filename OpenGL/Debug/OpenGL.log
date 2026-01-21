@@ -1,0 +1,4 @@
+﻿  Scanning sources for module dependencies...
+  Application.cpp
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\Application.cpp(206,24): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  OpenGL.vcxproj -> C:\Users\kanak\Dev\OpenGL\Debug\OpenGL.exe

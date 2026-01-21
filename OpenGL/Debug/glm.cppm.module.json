@@ -1,0 +1,22 @@
+{
+    "version": 1,
+    "revision": 0,
+    "rules": [
+        {
+            "primary-output": "Debug\\glm.cppm.obj",
+            "outputs": [
+                "C:\\Users\\kanak\\Dev\\OpenGL\\OpenGL\\Debug\\vc145.pdb",
+                "Debug\\",
+                "C:\\Users\\kanak\\Dev\\OpenGL\\OpenGL\\Debug\\glm.cppm.ifc"
+            ],
+            "provides": [
+                {
+                    "logical-name": "glm",
+                    "source-path": "c:\\users\\kanak\\dev\\opengl\\opengl\\src\\vendor\\glm\\glm.cppm",
+                    "is-interface": true
+                }
+            ],
+            "requires": []
+        }
+    ]
+}
