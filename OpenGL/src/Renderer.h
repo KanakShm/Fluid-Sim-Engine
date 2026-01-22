@@ -16,6 +16,7 @@ bool GLLogCall(const char* function, const char* file, int line);
 
 class Renderer {
 public:
-    void Draw(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const;
+    void DrawElementTriangle(const VertexArray& va, const IndexBuffer& ib, const Shader& shader) const;
+    void DrawArraySphere(const VertexArray& va, const Shader& shader, const int& count) const;
     void Clear() const;
 };

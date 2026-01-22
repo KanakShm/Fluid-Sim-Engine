@@ -1,0 +1,44 @@
+#pragma once
+
+#include "Test.h"
+
+#include "VertexBuffer.h"
+#include "VertexBufferLayout.h"
+#include "Texture.h"
+
+#include <memory>
+
+#define NO_OF_PARTICLES 100000
+
+namespace test {
+	class FluidSim2D : public Test
+	{
+	public:
+		struct Particle {
+			float x, y, z;
+			float r, g, b;
+		};
+
+		FluidSim2D();
+		~FluidSim2D();
+
+		void OnUpdate(float deltaTime) override;
+		void OnRender() override;
+		void OnImGuiRender() override;
+
+	private:
+		std::unique_ptr<VertexArray> m_VAO;
+		std::unique_ptr<VertexBuffer> m_VertexBuffer;
+		std::unique_ptr<IndexBuffer> m_IndexBuffer;
+		std::unique_ptr<Shader> m_Shader;
+		std::unique_ptr<Texture> m_Texture;
+
+		glm::mat4 m_Proj, m_View;
+		glm::vec3 m_TranslationA, m_TranslationB;
+
+		std::vector<Particle> particles;
+		float prev_time = 0.0f;
+		int trajectory = 1;
+		float capacity = 1.0f;
+	};
+}

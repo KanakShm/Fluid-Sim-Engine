@@ -21,6 +21,7 @@
 
 #include "tests/TestClearColour.h"
 #include "tests/TestTexture2D.h"
+#include "tests/FluidSim2D.h"
 
 int main(void)
 {
@@ -67,6 +68,7 @@ int main(void)
 
         testMenu->RegisterTest<test::TestClearColour>("Clear Colour");
         testMenu->RegisterTest<test::TestTexture2D>("2D Texture");
+        testMenu->RegisterTest<test::FluidSim2D>("Fluid Sim 2D");
 
         while (!glfwWindowShouldClose(window))
         {
@@ -79,7 +81,7 @@ int main(void)
 
             if (currentTest)
             {
-                currentTest->OnUpdate(0.0f);
+                currentTest->OnUpdate(glfwGetTime());
                 currentTest->OnRender();
                 ImGui::Begin("Test");
                 if (currentTest != testMenu && ImGui::Button("<-"))
