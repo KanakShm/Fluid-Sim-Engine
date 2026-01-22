@@ -1,6 +1,3 @@
 ﻿  Scanning sources for module dependencies...
-  Application.cpp
-  Test.cpp
-  TestClearColour.cpp
-  Generating Code...
+  TestTexture2D.cpp
   OpenGL.vcxproj -> C:\Users\kanak\Dev\OpenGL\Debug\OpenGL.exe
