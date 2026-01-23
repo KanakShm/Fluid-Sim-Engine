@@ -14,12 +14,18 @@ namespace test {
 	{
 		// Randomly initialise the position of the particles
 		for (int i = 0; i < NO_OF_PARTICLES; ++i) {
-			particles[i].x = (std::rand() % 1000) / 1000.0f * 2.0f - 1.0f;
-			particles[i].y = (std::rand() % 1000) / 1000.0f * 2.0f - 1.0f;
-			particles[i].z = 0.0f;
-			particles[i].r = 0.0f;
-			particles[i].g = 0.5f;
-			particles[i].b = 1.0f;
+			particles[i].position.x = (float)(std::rand()) / RAND_MAX - 0.5f;
+			particles[i].position.y = (float)(std::rand()) / RAND_MAX - 0.5f;
+
+			particles[i].velocity.x = 0.0;
+			particles[i].velocity.y = 0.0;
+
+			particles[i].acceleration.x = 0.0;
+			particles[i].acceleration.y = 0.0;
+
+			particles[i].colour.r = 0.0f;
+			particles[i].colour.g = 0.5f;
+			particles[i].colour.b = 1.0f;
 		}
 
 		GLCall(GL_PROGRAM_POINT_SIZE);
@@ -31,7 +37,9 @@ namespace test {
 
 		m_VertexBuffer = std::make_unique<VertexBuffer>(nullptr, sizeof(Particle) * NO_OF_PARTICLES);
 		VertexBufferLayout layout;
-		layout.Push<float>(3);
+		layout.Push<float>(2);
+		layout.Push<float>(2);
+		layout.Push<float>(2);
 		layout.Push<float>(3);
 
 		m_VAO->AddBuffer(*m_VertexBuffer, layout);
@@ -41,9 +49,12 @@ namespace test {
 
 	void FluidSim2D::OnUpdate(float curr_time) {
 		// Update the position in RAM on the CPU side
-		for (auto& p : particles) {
-			p.y -= trajectory * (curr_time - prev_time) * 0.1f;
-			if (p.y <= 600.0) trajectory *= -1;
+		for (auto& particle : particles) {
+			particle.position.y -= particle.velocity.y * (curr_time - prev_time);
+			if (particle.position.y <= -1.0 || particle.position.y >= 1.0) {
+				particle.velocity.y *= -1;
+			}
+			prev_time = curr_time;
 		}
 
 		prev_time = curr_time;

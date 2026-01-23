@@ -15,8 +15,10 @@ namespace test {
 	{
 	public:
 		struct Particle {
-			float x, y, z;
-			float r, g, b;
+			glm::vec2 position;
+			glm::vec2 velocity;
+			glm::vec2 acceleration;
+			glm::vec3 colour;
 		};
 
 		FluidSim2D();
