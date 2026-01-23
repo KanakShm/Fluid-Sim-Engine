@@ -8,13 +8,19 @@
 
 #include <memory>
 #include <cmath>
-
-#define NO_OF_PARTICLES 1000
+#include <array>
+#include <algorithm>
 
 namespace PhysicsConstants {
 	static constexpr float PI = 3.1415926535f;
 	static constexpr float R = 0.05f; // Smoothing radius
 	static constexpr float mass = 1.0f;
+}
+
+namespace SimulationConstants {
+	static constexpr int NO_OF_PARTICLES = 1000;
+	static constexpr int PRIME1 = 98561123;
+	static constexpr int PRIME2 = 863421509;
 }
 
 constexpr float calculate_r8(float r) {

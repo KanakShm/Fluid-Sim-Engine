@@ -10,10 +10,10 @@ namespace test {
 		: m_Proj(glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f)), 
 			m_View(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f))), 
 			m_TranslationA(200, 200, 0), m_TranslationB(400, 200, 0), prev_time(glfwGetTime()),
-			particles{std::vector<Particle>(NO_OF_PARTICLES)}
+			particles{std::vector<Particle>(SimulationConstants::NO_OF_PARTICLES)}
 	{
 		// Randomly initialise the position of the particles
-		for (int i = 0; i < NO_OF_PARTICLES; ++i) {
+		for (int i = 0; i < SimulationConstants::NO_OF_PARTICLES; ++i) {
 			particles[i].position.x = (float)(std::rand()) / RAND_MAX - 0.5f;
 			particles[i].position.y = (float)(std::rand()) / RAND_MAX - 0.5f;
 
@@ -35,7 +35,7 @@ namespace test {
 		m_Shader = std::make_unique<Shader>("res/shaders/Fluid.shader");
 		m_VAO = std::make_unique<VertexArray>();
 
-		m_VertexBuffer = std::make_unique<VertexBuffer>(nullptr, sizeof(Particle) * NO_OF_PARTICLES);
+		m_VertexBuffer = std::make_unique<VertexBuffer>(nullptr, sizeof(Particle) * SimulationConstants::NO_OF_PARTICLES);
 		VertexBufferLayout layout;
 		layout.Push<float>(2);	// Position
 		layout.Push<float>(2);	// Velocity
@@ -49,29 +49,56 @@ namespace test {
 	}
 	FluidSim2D::~FluidSim2D() {}
 
+	// Update the position in RAM on the CPU side
 	void FluidSim2D::OnUpdate(float curr_time) {
-		// Update the position in RAM on the CPU side
 		float dt = curr_time - prev_time;
 		prev_time = curr_time;
 		
-		for (auto& pi : particles) {
-			float R2 = PhysicsConstants::R * PhysicsConstants::R;
-			for (auto& pj : particles) {
-				glm::vec2 diff = pj.position - pi.position;
-				float x2 = glm::dot(diff, diff);
-				if (R2 > x2) {
-					float term = R2 - x2;
-					pi.density += PhysicsConstants::mass * poly6_kernel * term * term * term;
+		// Initialise and fill the spatial hash table
+		std::array<std::array<int, 2>, SimulationConstants::NO_OF_PARTICLES> spatialHash;
+		std::fill(spatialHash.begin(), spatialHash.end(), std::array<int, 2>{-1, -1});
+		for (int i = 0; i < particles.size(); ++i) {
+			int coord_x = std::floor((particles[i].position.x + 1) / PhysicsConstants::R);
+			int coord_y = std::floor((particles[i].position.y + 1) / PhysicsConstants::R);
+			int grid_hash = (coord_x * SimulationConstants::PRIME1 + coord_y * SimulationConstants::PRIME2) % SimulationConstants::NO_OF_PARTICLES;
+			
+			spatialHash[i] = { grid_hash, i };
+		}
+		std::sort(spatialHash.begin(), spatialHash.end(), std::less<std::array<int, 2>>());
+
+		// Initialise and fill the indice lookup table
+		std::array<int, SimulationConstants::NO_OF_PARTICLES> indices;
+		std::fill(indices.begin(), indices.end(), -1);
+		for (int i = 0; i < spatialHash.size(); ++i) {
+			indices[spatialHash[i][0]] = i;
+		}
+
+		// Iterate through all particles and calculate density
+		int R2 = PhysicsConstants::R * PhysicsConstants::R;
+		int grid_size = std::floor(2.0f / PhysicsConstants::R);
+		for (int i = 0; i < particles.size(); ++i) {
+			Particle particle = particles[i];
+			// get the grid coordinate of that particle
+			int coord_x = std::floor((particle.position.x + 1) / 2);
+			int coord_y = std::floor((particle.position.y + 1) / 2);
+			int particle_grid = (coord_x * SimulationConstants::PRIME1 + coord_y * SimulationConstants::PRIME2) % SimulationConstants::NO_OF_PARTICLES;
+
+			// get surrounding grid coordinates
+			for (int j = -1; j < 1; ++j) {
+				for (int k = -1; k < 1; ++k) {
+					int target_grid = particle_grid + k * grid_size + j;
+					int target_grid_start_idx = indices[target_grid];
+					if (target_grid_start_idx == -1) continue;
+					while (spatialHash[target_grid_start_idx][0] != target_grid) {
+						Particle neighbour = particles[spatialHash[target_grid_start_idx][1]];
+						glm::vec2 diff = particle.position - neighbour.position;
+						float eucalidian_dist = glm::dot(diff, diff);
+						if (R2 > eucalidian_dist) {
+							float term = R2 - eucalidian_dist;
+							particle.density += poly6_kernel * term * term * term;
+						}
+					}
 				}
-			}
-			pi.position.y += pi.velocity.y * dt;
-			if (pi.position.y <= -1.0f) {
-				pi.position.y = -0.99f;
-				pi.velocity.y *= -1.0f * 0.6f;
-			}
-			else if (pi.position.y >= 1.0) {
-				pi.position.y = 0.99f;
-				pi.velocity.y *= -1.0f * 0.6f;
 			}
 		}
 
