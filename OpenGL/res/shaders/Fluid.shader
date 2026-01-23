@@ -4,7 +4,9 @@
 layout(location = 0) in vec2 position;
 layout(location = 1) in vec2 velocity;
 layout(location = 2) in vec2 acceleration;
-layout(location = 3) in vec3 colour;
+layout(location = 3) in float density;
+layout(location = 4) in float pressure;
+layout(location = 5) in vec3 colour;
 
 out vec4 v_Colour;
 

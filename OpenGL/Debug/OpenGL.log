@@ -1,4 +1,7 @@
 ﻿  Scanning sources for module dependencies...
   FluidSim2D.cpp
-C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(15,71): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(12,71): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  Application.cpp
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\Application.cpp(84,50): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
+  Generating Code...
   OpenGL.vcxproj -> C:\Users\kanak\Dev\OpenGL\Debug\OpenGL.exe

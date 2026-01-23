@@ -1,8 +1,5 @@
 #include "FluidSim2D.h"
 
-#include <algorithm>
-#include <execution>
-
 #include "Renderer.h"
 #include "imgui/imgui.h"
 
@@ -40,10 +37,12 @@ namespace test {
 
 		m_VertexBuffer = std::make_unique<VertexBuffer>(nullptr, sizeof(Particle) * NO_OF_PARTICLES);
 		VertexBufferLayout layout;
-		layout.Push<float>(2);
-		layout.Push<float>(2);
-		layout.Push<float>(2);
-		layout.Push<float>(3);
+		layout.Push<float>(2);	// Position
+		layout.Push<float>(2);	// Velocity
+		layout.Push<float>(2);	// Acceleration
+		layout.Push<float>(1);	// Density
+		layout.Push<float>(1);	// Pressure
+		layout.Push<float>(3);	// Colour
 
 		m_VAO->AddBuffer(*m_VertexBuffer, layout);
 		m_Shader->Bind();
@@ -55,17 +54,26 @@ namespace test {
 		float dt = curr_time - prev_time;
 		prev_time = curr_time;
 		
-		std::for_each(std::execution::par, particles.begin(), particles.end(), [dt](Particle& particle) {
-			particle.position.y += particle.velocity.y * dt;
-			if (particle.position.y <= -1.0f) {
-				particle.position.y = -0.99f;
-				particle.velocity.y *= -1.0f * 0.6f;
+		for (auto& pi : particles) {
+			float R2 = PhysicsConstants::R * PhysicsConstants::R;
+			for (auto& pj : particles) {
+				glm::vec2 diff = pj.position - pi.position;
+				float x2 = glm::dot(diff, diff);
+				if (R2 > x2) {
+					float term = R2 - x2;
+					pi.density += PhysicsConstants::mass * poly6_kernel * term * term * term;
+				}
 			}
-			else if (particle.position.y >= 1.0) {
-				particle.position.y = 0.99f;
-				particle.velocity.y *= -1.0f * 0.6f;
+			pi.position.y += pi.velocity.y * dt;
+			if (pi.position.y <= -1.0f) {
+				pi.position.y = -0.99f;
+				pi.velocity.y *= -1.0f * 0.6f;
 			}
-		});
+			else if (pi.position.y >= 1.0) {
+				pi.position.y = 0.99f;
+				pi.velocity.y *= -1.0f * 0.6f;
+			}
+		}
 
 		// Upload the updated vector to the existing GPU buffer
 		m_VertexBuffer->Bind();
