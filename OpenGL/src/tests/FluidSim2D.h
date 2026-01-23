@@ -8,7 +8,7 @@
 
 #include <memory>
 
-#define NO_OF_PARTICLES 100000
+#define NO_OF_PARTICLES 1000000
 
 namespace test {
 	class FluidSim2D : public Test
@@ -39,7 +39,7 @@ namespace test {
 		glm::vec3 m_TranslationA, m_TranslationB;
 
 		std::vector<Particle> particles;
-		float prev_time = 0.0f;
+		float prev_time;
 		int trajectory = 1;
 		float capacity = 1.0f;
 	};

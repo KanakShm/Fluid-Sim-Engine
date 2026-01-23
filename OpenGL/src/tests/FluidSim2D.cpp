@@ -1,5 +1,8 @@
 #include "FluidSim2D.h"
 
+#include <algorithm>
+#include <execution>
+
 #include "Renderer.h"
 #include "imgui/imgui.h"
 
@@ -9,7 +12,7 @@ namespace test {
 	FluidSim2D::FluidSim2D()
 		: m_Proj(glm::ortho(0.0f, 960.0f, 0.0f, 540.0f, -1.0f, 1.0f)), 
 			m_View(glm::translate(glm::mat4(1.0f), glm::vec3(0.0f, 0.0f, 0.0f))), 
-			m_TranslationA(200, 200, 0), m_TranslationB(400, 200, 0), 
+			m_TranslationA(200, 200, 0), m_TranslationB(400, 200, 0), prev_time(glfwGetTime()),
 			particles{std::vector<Particle>(NO_OF_PARTICLES)}
 	{
 		// Randomly initialise the position of the particles
@@ -18,7 +21,7 @@ namespace test {
 			particles[i].position.y = (float)(std::rand()) / RAND_MAX - 0.5f;
 
 			particles[i].velocity.x = 0.0;
-			particles[i].velocity.y = 0.0;
+			particles[i].velocity.y = -1.0;
 
 			particles[i].acceleration.x = 0.0;
 			particles[i].acceleration.y = 0.0;
@@ -49,19 +52,23 @@ namespace test {
 
 	void FluidSim2D::OnUpdate(float curr_time) {
 		// Update the position in RAM on the CPU side
-		for (auto& particle : particles) {
-			particle.position.y -= particle.velocity.y * (curr_time - prev_time);
-			if (particle.position.y <= -1.0 || particle.position.y >= 1.0) {
-				particle.velocity.y *= -1;
-			}
-			prev_time = curr_time;
-		}
-
+		float dt = curr_time - prev_time;
 		prev_time = curr_time;
+		
+		std::for_each(std::execution::par, particles.begin(), particles.end(), [dt](Particle& particle) {
+			particle.position.y += particle.velocity.y * dt;
+			if (particle.position.y <= -1.0f) {
+				particle.position.y = -0.99f;
+				particle.velocity.y *= -1.0f * 0.6f;
+			}
+			else if (particle.position.y >= 1.0) {
+				particle.position.y = 0.99f;
+				particle.velocity.y *= -1.0f * 0.6f;
+			}
+		});
 
 		// Upload the updated vector to the existing GPU buffer
 		m_VertexBuffer->Bind();
-		glBufferData(GL_ARRAY_BUFFER, particles.size() * sizeof(Particle), nullptr, GL_DYNAMIC_DRAW);
 		GLCall(glBufferSubData(GL_ARRAY_BUFFER, 0, particles.size() * sizeof(Particle), particles.data()));
 	}
 
