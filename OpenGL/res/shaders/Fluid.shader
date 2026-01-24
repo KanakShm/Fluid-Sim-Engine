@@ -6,7 +6,10 @@ layout(location = 1) in vec2 velocity;
 layout(location = 2) in vec2 acceleration;
 layout(location = 3) in float density;
 layout(location = 4) in float pressure;
-layout(location = 5) in vec3 colour;
+layout(location = 5) in vec2 F_pressure;
+layout(location = 6) in vec2 F_viscocity;
+layout(location = 7) in vec2 F_other;
+layout(location = 8) in vec3 colour;
 
 out vec4 v_Colour;
 

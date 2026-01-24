@@ -42,6 +42,9 @@ namespace test {
 		layout.Push<float>(2);	// Acceleration
 		layout.Push<float>(1);	// Density
 		layout.Push<float>(1);	// Pressure
+		layout.Push<float>(2);	// Force of pressure
+		layout.Push<float>(2);	// Force of viscocity
+		layout.Push<float>(2);	// Force of other
 		layout.Push<float>(3);	// Colour
 
 		m_VAO->AddBuffer(*m_VertexBuffer, layout);
@@ -150,9 +153,62 @@ namespace test {
 	/*
 		Calculates the force of pressure on each particle using Debrun's spiky kernel
 	*/
-	float FluidSim2D::ComputePressureForce()
+	void FluidSim2D::ComputePressureForce()
 	{
-		return 0.0f;
+		float R2 = PhysicsConstants::SMOOTHING_RADIUS * PhysicsConstants::SMOOTHING_RADIUS;
+
+		std::for_each(std::execution::par_unseq, iter_idx.begin(), iter_idx.end(),
+			[&](int i) {
+				Particle& particle = particles[i];
+				glm::vec2 f_pressure(0.0f);
+
+				// get the grid coordinate of that particle
+				int coord_x = std::floor((particle.position.x + 1) / PhysicsConstants::SMOOTHING_RADIUS);
+				int coord_y = std::floor((particle.position.y + 1) / PhysicsConstants::SMOOTHING_RADIUS);
+
+				// get surrounding grid coordinates
+				for (int j = -1; j <= 1; ++j) {
+					for (int k = -1; k <= 1; ++k) {
+						int target_x = coord_x + j;
+						int target_y = coord_y + k;
+
+						int target_grid_hash = (target_x * SimulationConstants::PRIME1) ^ (target_y * SimulationConstants::PRIME2);
+						target_grid_hash = std::abs(target_grid_hash) % SimulationConstants::TABLE_SIZE;
+
+						int target_grid_idx = indices[target_grid_hash];
+						if (target_grid_idx == -1) continue;
+						while (target_grid_idx < spatialHash.size() &&
+							spatialHash[target_grid_idx][0] == target_grid_hash) {
+							int neighbour_idx = spatialHash[target_grid_idx][1];
+							if (neighbour_idx == i) {
+								target_grid_idx++;
+								continue;
+							}
+
+							const Particle& neighbour = particles[neighbour_idx];
+							glm::vec2 diff = particle.position - neighbour.position;
+							float dist2 = glm::dot(diff, diff);
+
+							if (dist2 < R2 && dist2 > 1e-6f) {
+								// Calculate Spiky gradient
+								float eucalidian_dist = sqrt(dist2);
+								float term = PhysicsConstants::SMOOTHING_RADIUS - eucalidian_dist;
+								glm::vec2 direction = diff / eucalidian_dist;
+
+								glm::vec2 spiky_gradient = spiky_constant * term * term * -direction;
+
+								// Calculate Force
+								float pressure_avg = 0.5f * (particle.pressure + neighbour.pressure) / neighbour.density;
+								f_pressure += PhysicsConstants::MASS * pressure_avg * spiky_gradient;
+							}
+							target_grid_idx++;
+						}
+					}
+				}
+
+				particle.F_pressure = f_pressure;
+			}
+		);
 	}
 
 	/*
@@ -167,7 +223,7 @@ namespace test {
 		UpdateParticleDensity();
 		UpdateParticlePressure();
 
-		float F_pressure = ComputePressureForce();
+		ComputePressureForce();
 
 		// Upload the updated vector to the existing GPU buffer
 		m_VertexBuffer->Bind();

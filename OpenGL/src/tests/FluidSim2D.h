@@ -22,9 +22,14 @@ namespace PhysicsConstants {
 
 namespace SimulationConstants {
 	static constexpr int NO_OF_PARTICLES = 10000;
-	static constexpr int TABLE_SIZE = SimulationConstants::NO_OF_PARTICLES * 2;
+	static constexpr int TABLE_SIZE = NO_OF_PARTICLES * 2;
 	static constexpr int PRIME1 = 98561123;
 	static constexpr int PRIME2 = 863421509;
+}
+
+constexpr float calculate_r6(float r) {
+	float r2 = r * r;
+	return r2 * r2 * r2;
 }
 
 constexpr float calculate_r8(float r) {
@@ -33,6 +38,7 @@ constexpr float calculate_r8(float r) {
 	return r4 * r4;
 }
 
+static constexpr float spiky_constant = -45.0f / PhysicsConstants::PI * calculate_r6(PhysicsConstants::SMOOTHING_RADIUS);
 static constexpr float poly6_kernel = 4.0f / (PhysicsConstants::PI * calculate_r8(PhysicsConstants::SMOOTHING_RADIUS));
 
 namespace test {
@@ -45,6 +51,9 @@ namespace test {
 			glm::vec2 acceleration;
 			float density;
 			float pressure;
+			glm::vec2 F_pressure;
+			glm::vec2 F_viscocity;
+			glm::vec2 F_other;
 			glm::vec3 colour;
 		};
 
@@ -52,10 +61,10 @@ namespace test {
 		~FluidSim2D();
 
 		void UpdateSpatialHashGrid();
-		std::vector<int> GetNeighbourParticles(int particle_id);
 		void UpdateParticleDensity();
 		void UpdateParticlePressure();
-		float ComputePressureForce();
+
+		void ComputePressureForce();
 
 		void OnUpdate(float deltaTime) override;
 		void OnRender() override;

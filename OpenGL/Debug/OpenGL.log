@@ -1,12 +1,12 @@
 ﻿  Scanning sources for module dependencies...
   FluidSim2D.cpp
 C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(12,71): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(59,17): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(60,17): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(97,17): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(98,17): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(111,36): warning C4018: '<': signed/unsigned mismatch
-LINK : warning LNK4098: defaultlib 'LIBCMT' conflicts with use of other libs; use /NODEFAULTLIB:library
-LINK : warning LNK4098: defaultlib 'MSVCRT' conflicts with use of other libs; use /NODEFAULTLIB:library
-glew32s.lib(glew.obj) : warning LNK4099: PDB 'glew_static.pdb' was not found with 'glew32s.lib(glew.obj)' or at 'C:\Users\kanak\Dev\OpenGL\Debug\glew_static.pdb'; linking object as if no debug info
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(62,17): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(63,17): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(100,17): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(101,17): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(114,36): warning C4018: '<': signed/unsigned mismatch
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(166,17): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(167,17): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(180,30): warning C4018: '<': signed/unsigned mismatch
   OpenGL.vcxproj -> C:\Users\kanak\Dev\OpenGL\Debug\OpenGL.exe
