@@ -1,7 +1,13 @@
 ﻿  Scanning sources for module dependencies...
-  Application.cpp
-C:\Users\kanak\Dev\OpenGL\OpenGL\src\Application.cpp(84,50): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
   FluidSim2D.cpp
 C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(12,71): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-  Generating Code...
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(67,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(68,16): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(69,16): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(79,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(87,17): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(88,21): warning C4018: '<': signed/unsigned mismatch
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(91,16): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(92,16): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(105,35): warning C4018: '<': signed/unsigned mismatch
   OpenGL.vcxproj -> C:\Users\kanak\Dev\OpenGL\Debug\OpenGL.exe

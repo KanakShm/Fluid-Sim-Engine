@@ -18,7 +18,7 @@ namespace PhysicsConstants {
 }
 
 namespace SimulationConstants {
-	static constexpr int NO_OF_PARTICLES = 1000;
+	static constexpr int NO_OF_PARTICLES = 10000;
 	static constexpr int PRIME1 = 98561123;
 	static constexpr int PRIME2 = 863421509;
 }
