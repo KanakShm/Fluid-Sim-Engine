@@ -14,12 +14,15 @@
 
 namespace PhysicsConstants {
 	static constexpr float PI = 3.1415926535f;
-	static constexpr float R = 0.05f; // Smoothing radius
-	static constexpr float mass = 1.0f;
+	static constexpr float SMOOTHING_RADIUS = 0.05f;
+	static constexpr float MASS = 1.0f;
+	static constexpr float REST_DENSITY = 1.0;
+	static constexpr float GASS_CONSTANT = 1.0;
 }
 
 namespace SimulationConstants {
 	static constexpr int NO_OF_PARTICLES = 10000;
+	static constexpr int TABLE_SIZE = SimulationConstants::NO_OF_PARTICLES * 2;
 	static constexpr int PRIME1 = 98561123;
 	static constexpr int PRIME2 = 863421509;
 }
@@ -30,7 +33,7 @@ constexpr float calculate_r8(float r) {
 	return r4 * r4;
 }
 
-static constexpr float poly6_kernel = 4.0f / (PhysicsConstants::PI * calculate_r8(PhysicsConstants::R));
+static constexpr float poly6_kernel = 4.0f / (PhysicsConstants::PI * calculate_r8(PhysicsConstants::SMOOTHING_RADIUS));
 
 namespace test {
 	class FluidSim2D : public Test
@@ -48,6 +51,12 @@ namespace test {
 		FluidSim2D();
 		~FluidSim2D();
 
+		void UpdateSpatialHashGrid();
+		std::vector<int> GetNeighbourParticles(int particle_id);
+		void UpdateParticleDensity();
+		void UpdateParticlePressure();
+		float ComputePressureForce();
+
 		void OnUpdate(float deltaTime) override;
 		void OnRender() override;
 		void OnImGuiRender() override;
@@ -64,5 +73,19 @@ namespace test {
 
 		std::vector<Particle> particles;
 		float prev_time;
+
+		std::vector<std::array<int, 2>> spatialHash =
+			std::vector<std::array<int, 2>>(SimulationConstants::NO_OF_PARTICLES, {INT_MAX, INT_MAX});
+
+		std::vector<int> indices =
+			std::vector<int>(SimulationConstants::TABLE_SIZE, -1);
+
+		std::vector<int> iter_idx = 
+			[]() {
+				std::vector<int> v(SimulationConstants::NO_OF_PARTICLES);
+				std::iota(v.begin(), v.end(), 0);
+				return v;
+			}();
+
 	};
 }
