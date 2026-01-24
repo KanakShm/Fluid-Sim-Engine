@@ -53,73 +53,82 @@ namespace test {
 	void FluidSim2D::OnUpdate(float curr_time) {
 		float dt = curr_time - prev_time;
 		prev_time = curr_time;
-		
-		/*for (int i = 0; i < SimulationConstants::NO_OF_PARTICLES; ++i) {
-			for (int j = 0; j < SimulationConstants::NO_OF_PARTICLES; ++j) {
-				particles[i].density += 0.001;
-			}
-		}*/
 
 		const int TABLE_SIZE = SimulationConstants::NO_OF_PARTICLES * 2;
-		
+		std::vector<int> iter_idx(SimulationConstants::NO_OF_PARTICLES);
+		std::iota(iter_idx.begin(), iter_idx.end(), 0);
+
 		// Initialise and fill the spatial hash table
 		std::vector<std::array<int, 2>> spatialHash(SimulationConstants::NO_OF_PARTICLES, std::array<int, 2>{INT_MAX, INT_MAX});
-		for (int i = 0; i < particles.size(); ++i) {
-			int coord_x = std::floor((particles[i].position.x + 1) / PhysicsConstants::R);
-			int coord_y = std::floor((particles[i].position.y + 1) / PhysicsConstants::R);
-			int grid_hash = (coord_x * SimulationConstants::PRIME1) ^ (coord_y * SimulationConstants::PRIME2);
-			grid_hash = std::abs(grid_hash) % TABLE_SIZE;
-			
-			spatialHash[i] = { grid_hash, i };
-		}
-		std::sort(spatialHash.begin(), spatialHash.end(), std::less<std::array<int, 2>>());
+		std::for_each(std::execution::par_unseq, iter_idx.begin(), iter_idx.end(), 
+			[&](int i) {
+				int coord_x = std::floor((particles[i].position.x + 1) / PhysicsConstants::R);
+				int coord_y = std::floor((particles[i].position.y + 1) / PhysicsConstants::R);
+				int grid_hash = (coord_x * SimulationConstants::PRIME1) ^ (coord_y * SimulationConstants::PRIME2);
+				grid_hash = std::abs(grid_hash) % TABLE_SIZE;
+
+				spatialHash[i] = { grid_hash, i };
+			}
+		);
+
+		std::sort(std::execution::par_unseq, spatialHash.begin(), spatialHash.end(), std::less<std::array<int, 2>>());
 
 		// Initialise and fill the indice lookup table
 		std::vector<int> indices(TABLE_SIZE, -1);
-		for (int i = 0; i < spatialHash.size(); ++i) {
-			if (spatialHash[i][0] == -1) continue;
-			if (indices[spatialHash[i][0]] == -1)
-				indices[spatialHash[i][0]] = i;
-		}
+		std::for_each(std::execution::par_unseq, iter_idx.begin(), iter_idx.end(),
+			[&](int i) {
+				int prev_hash = i == 0 ? -1 : spatialHash[i - 1][0];
+
+				if (spatialHash[i][0] != INT_MAX &&
+					spatialHash[i][0] != prev_hash) {
+					indices[spatialHash[i][0]] = i;
+				}
+			}
+		);
 
 		// Iterate through all particles and calculate density
 		float R2 = PhysicsConstants::R * PhysicsConstants::R;
 		int grid_size = std::floor(2.0f / PhysicsConstants::R);
-		for (int i = 0; i < particles.size(); ++i) {
-			Particle& particle = particles[i];
-			// get the grid coordinate of that particle
-			int coord_x = std::floor((particle.position.x + 1) / PhysicsConstants::R);
-			int coord_y = std::floor((particle.position.y + 1) / PhysicsConstants::R);
 
-			// get surrounding grid coordinates
-			for (int j = -1; j <= 1; ++j) {
-				for (int k = -1; k <= 1; ++k) {
-					int target_x = coord_x + j;
-					int target_y = coord_y + k;
+		std::for_each(std::execution::par_unseq, iter_idx.begin(), iter_idx.end(),
+			[&](int i) {
+				Particle& particle = particles[i];
+				particle.density = 0.0f;
 
-					int target_grid_hash = (target_x * SimulationConstants::PRIME1) ^ (target_y * SimulationConstants::PRIME2);
-					target_grid_hash = std::abs(target_grid_hash) % TABLE_SIZE;
+				// get the grid coordinate of that particle
+				int coord_x = std::floor((particle.position.x + 1) / PhysicsConstants::R);
+				int coord_y = std::floor((particle.position.y + 1) / PhysicsConstants::R);
 
-					int target_grid_start_idx = indices[target_grid_hash];
-					if (target_grid_start_idx == -1) continue;
-					while (target_grid_start_idx < spatialHash.size() && 
-						   spatialHash[target_grid_start_idx][0] == target_grid_hash) {
-						int neighbour_id = spatialHash[target_grid_start_idx][1];
-						const Particle& neighbour = particles[neighbour_id];
+				// get surrounding grid coordinates
+				for (int j = -1; j <= 1; ++j) {
+					for (int k = -1; k <= 1; ++k) {
+						int target_x = coord_x + j;
+						int target_y = coord_y + k;
 
-						glm::vec2 diff = particle.position - neighbour.position;
-						float eucalidian_dist = glm::dot(diff, diff);
+						int target_grid_hash = (target_x * SimulationConstants::PRIME1) ^ (target_y * SimulationConstants::PRIME2);
+						target_grid_hash = std::abs(target_grid_hash) % TABLE_SIZE;
 
-						if (R2 > eucalidian_dist) {
-							float term = R2 - eucalidian_dist;
-							particle.density += poly6_kernel * term * term * term;
+						int target_grid_start_idx = indices[target_grid_hash];
+						if (target_grid_start_idx == -1) continue;
+						while (target_grid_start_idx < spatialHash.size() &&
+							spatialHash[target_grid_start_idx][0] == target_grid_hash) {
+							int neighbour_id = spatialHash[target_grid_start_idx][1];
+							const Particle& neighbour = particles[neighbour_id];
+
+							glm::vec2 diff = particle.position - neighbour.position;
+							float eucalidian_dist = glm::dot(diff, diff);
+
+							if (R2 > eucalidian_dist) {
+								float term = R2 - eucalidian_dist;
+								particle.density += poly6_kernel * term * term * term;
+							}
+
+							target_grid_start_idx++;
 						}
-
-						target_grid_start_idx++;
 					}
 				}
 			}
-		}
+		);
 
 		// Upload the updated vector to the existing GPU buffer
 		m_VertexBuffer->Bind();
