@@ -14,11 +14,11 @@ namespace test {
 	{
 		// Randomly initialise the position of the particles
 		for (int i = 0; i < SimulationConstants::NO_OF_PARTICLES; ++i) {
-			float x = Init::START_X + (i % Init::PPR) * Init::SPACING_X;
-			float y = Init::START_Y + (i / Init::PPR) * Init::SPACING_Y;
+			float x = (i % Init::PPR) * Init::SPACING_X / Init::PPR + Init::START_X;
+			float y = (i / Init::PPR) * Init::SPACING_Y / Init::PPR;
 
-			x += ((std::rand() % 100) / 100.0f) * 0.01f;
-			y += ((std::rand() % 100) / 100.0f) * 0.01f;
+			//x += ((std::rand() % 100) / 100.0f) * 0.01f;
+			//y += ((std::rand() % 100) / 100.0f) * 0.01f;
 
 			particles[i].position = glm::vec2(x, y);
 
