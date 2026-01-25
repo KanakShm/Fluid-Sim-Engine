@@ -14,10 +14,10 @@
 
 namespace PhysicsConstants {
 	static constexpr float PI = 3.1415926535f;
-	static constexpr float SMOOTHING_RADIUS = 0.1f;
-	static constexpr float MASS = 1.0f;
-	static constexpr float REST_DENSITY = 0.5f;
-	static constexpr float GASS_CONSTANT = 1000.0f;
+	static constexpr float SMOOTHING_RADIUS = 0.8f;
+	static constexpr float MASS = 0.0005f;
+	static constexpr float REST_DENSITY = 1000.0f;
+	static constexpr float GASS_CONSTANT = 5.573f;
 	static constexpr float GRAVITY = 9.81f;
 }
 
