@@ -14,17 +14,28 @@
 
 namespace PhysicsConstants {
 	static constexpr float PI = 3.1415926535f;
-	static constexpr float SMOOTHING_RADIUS = 0.05f;
+	static constexpr float SMOOTHING_RADIUS = 0.1f;
 	static constexpr float MASS = 1.0f;
-	static constexpr float REST_DENSITY = 1.0;
-	static constexpr float GASS_CONSTANT = 1.0;
+	static constexpr float REST_DENSITY = 0.5f;
+	static constexpr float GASS_CONSTANT = 1000.0f;
+	static constexpr float GRAVITY = 9.81f;
 }
 
 namespace SimulationConstants {
-	static constexpr int NO_OF_PARTICLES = 10000;
+	static constexpr int NO_OF_PARTICLES = 1000;
 	static constexpr int TABLE_SIZE = NO_OF_PARTICLES * 2;
 	static constexpr int PRIME1 = 98561123;
 	static constexpr int PRIME2 = 863421509;
+	static constexpr float DT = 0.001f;
+	static constexpr float DAMPENING = -0.5;
+}
+
+namespace Init {
+	static constexpr float START_X = -0.05f;
+	static constexpr float START_Y = -0.05f;
+	static constexpr float SPACING_X = 0.02f;
+	static constexpr float SPACING_Y = 0.02f;
+	static constexpr int PPR = 100.0f;
 }
 
 constexpr float calculate_r6(float r) {
@@ -38,7 +49,7 @@ constexpr float calculate_r8(float r) {
 	return r4 * r4;
 }
 
-static constexpr float spiky_constant = -45.0f / PhysicsConstants::PI * calculate_r6(PhysicsConstants::SMOOTHING_RADIUS);
+static constexpr float spiky_constant = -45.0f / (PhysicsConstants::PI * calculate_r6(PhysicsConstants::SMOOTHING_RADIUS));
 static constexpr float poly6_kernel = 4.0f / (PhysicsConstants::PI * calculate_r8(PhysicsConstants::SMOOTHING_RADIUS));
 
 namespace test {

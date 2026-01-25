@@ -14,18 +14,22 @@ namespace test {
 	{
 		// Randomly initialise the position of the particles
 		for (int i = 0; i < SimulationConstants::NO_OF_PARTICLES; ++i) {
-			particles[i].position.x = (float)(std::rand()) / RAND_MAX - 0.5f;
-			particles[i].position.y = (float)(std::rand()) / RAND_MAX - 0.5f;
+			float x = Init::START_X + (i % Init::PPR) * Init::SPACING_X;
+			float y = Init::START_Y + (i / Init::PPR) * Init::SPACING_Y;
 
-			particles[i].velocity.x = 0.0;
-			particles[i].velocity.y = -1.0;
+			x += ((std::rand() % 100) / 100.0f) * 0.01f;
+			y += ((std::rand() % 100) / 100.0f) * 0.01f;
 
-			particles[i].acceleration.x = 0.0;
-			particles[i].acceleration.y = 0.0;
+			particles[i].position = glm::vec2(x, y);
 
-			particles[i].colour.r = 0.0f;
-			particles[i].colour.g = 0.5f;
-			particles[i].colour.b = 1.0f;
+			particles[i].density = 0.0f;
+			particles[i].pressure = 0.0f;
+
+			particles[i].F_pressure = glm::vec2(0.0f);
+			particles[i].F_viscocity = glm::vec2(0.0f);
+			particles[i].F_other = glm::vec2(0.0f);
+
+			particles[i].colour = glm::vec3(0.0f, 0.5f, 1.0f);
 		}
 
 		GLCall(GL_PROGRAM_POINT_SIZE);
@@ -61,8 +65,12 @@ namespace test {
 				const Particle& particle = particles[i];
 				int coord_x = std::floor((particle.position.x + 1) / PhysicsConstants::SMOOTHING_RADIUS);
 				int coord_y = std::floor((particle.position.y + 1) / PhysicsConstants::SMOOTHING_RADIUS);
-				int grid_hash = (coord_x * SimulationConstants::PRIME1) ^ (coord_y * SimulationConstants::PRIME2);
-				grid_hash = std::abs(grid_hash) % SimulationConstants::TABLE_SIZE;
+
+				unsigned int hash_x = coord_x * SimulationConstants::PRIME1;
+				unsigned int hash_y = coord_y * SimulationConstants::PRIME2;
+
+				unsigned int raw_hash = hash_x ^ hash_y;
+;				int grid_hash = raw_hash % SimulationConstants::TABLE_SIZE;
 
 				spatialHash[i] = { grid_hash, i };
 			}
@@ -106,8 +114,11 @@ namespace test {
 						int target_x = coord_x + j;
 						int target_y = coord_y + k;
 
-						int target_grid_hash = (target_x * SimulationConstants::PRIME1) ^ (target_y * SimulationConstants::PRIME2);
-						target_grid_hash = std::abs(target_grid_hash) % SimulationConstants::TABLE_SIZE;
+						unsigned int hash_x = target_x * SimulationConstants::PRIME1;
+						unsigned int hash_y = target_y * SimulationConstants::PRIME2;
+
+						unsigned int raw_hash = hash_x ^ hash_y;
+						int target_grid_hash = raw_hash % SimulationConstants::TABLE_SIZE;
 
 						int target_grid_start_idx = indices[target_grid_hash];
 						if (target_grid_start_idx == -1) continue;
@@ -172,8 +183,11 @@ namespace test {
 						int target_x = coord_x + j;
 						int target_y = coord_y + k;
 
-						int target_grid_hash = (target_x * SimulationConstants::PRIME1) ^ (target_y * SimulationConstants::PRIME2);
-						target_grid_hash = std::abs(target_grid_hash) % SimulationConstants::TABLE_SIZE;
+						unsigned int hash_x = target_x * SimulationConstants::PRIME1;
+						unsigned int hash_y = target_y * SimulationConstants::PRIME2;
+
+						unsigned int raw_hash = hash_x ^ hash_y;
+						int target_grid_hash = raw_hash % SimulationConstants::TABLE_SIZE;
 
 						int target_grid_idx = indices[target_grid_hash];
 						if (target_grid_idx == -1) continue;
@@ -195,11 +209,11 @@ namespace test {
 								float term = PhysicsConstants::SMOOTHING_RADIUS - eucalidian_dist;
 								glm::vec2 direction = diff / eucalidian_dist;
 
-								glm::vec2 spiky_gradient = spiky_constant * term * term * -direction;
+								glm::vec2 spiky_gradient = spiky_constant * term * term * direction;
 
 								// Calculate Force
 								float pressure_avg = 0.5f * (particle.pressure + neighbour.pressure) / neighbour.density;
-								f_pressure += PhysicsConstants::MASS * pressure_avg * spiky_gradient;
+								f_pressure += -PhysicsConstants::MASS * pressure_avg * spiky_gradient;
 							}
 							target_grid_idx++;
 						}
@@ -216,14 +230,45 @@ namespace test {
 	*/
 	void FluidSim2D::OnUpdate(float curr_time) 
 	{
-		float dt = curr_time - prev_time;
-		prev_time = curr_time;
-
 		UpdateSpatialHashGrid();
 		UpdateParticleDensity();
 		UpdateParticlePressure();
 
 		ComputePressureForce();
+
+		std::for_each(std::execution::par_unseq, particles.begin(), particles.end(), 
+			[&](Particle& particle) {
+				float curr_time = glfwGetTime();
+				float dt = curr_time - prev_time;
+				prev_time = curr_time;
+
+				glm::vec2 F_total = particle.F_pressure + PhysicsConstants::MASS * glm::vec2(0.0f, -PhysicsConstants::GRAVITY);
+				particle.acceleration = F_total / PhysicsConstants::MASS;
+				particle.velocity += particle.acceleration * SimulationConstants::DT;
+				particle.position += particle.velocity * SimulationConstants::DT;
+
+				// Boundary conditions
+				if (particle.position.x < -1.0) {
+					particle.position.x = -1.0;
+					particle.velocity.x *= SimulationConstants::DAMPENING;
+				}
+
+				if (particle.position.x > 1.0) {
+					particle.position.x = 1.0;
+					particle.velocity.x *= SimulationConstants::DAMPENING;
+				}
+
+				if (particle.position.y < -1.0) {
+					particle.position.y = -1.0;
+					particle.velocity.y *= SimulationConstants::DAMPENING;
+				}
+
+				if (particle.position.y > 1.0) {
+					particle.position.y = 1.0;
+					particle.velocity.y *= SimulationConstants::DAMPENING;
+				}
+			}
+		);
 
 		// Upload the updated vector to the existing GPU buffer
 		m_VertexBuffer->Bind();

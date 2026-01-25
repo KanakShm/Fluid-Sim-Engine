@@ -1,12 +1,22 @@
 ﻿  Scanning sources for module dependencies...
+  Application.cpp
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.h(38,27): warning C4244: 'initializing': conversion from 'float' to 'const int', possible loss of data
+  (compiling source file 'src/Application.cpp')
+  
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\Application.cpp(84,50): warning C4244: 'argument': conversion from 'double' to 'float', possible loss of data
   FluidSim2D.cpp
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.h(38,27): warning C4244: 'initializing': conversion from 'float' to 'const int', possible loss of data
+  (compiling source file 'src/tests/FluidSim2D.cpp')
+  
 C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(12,71): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(62,17): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(63,17): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(100,17): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(101,17): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(114,36): warning C4018: '<': signed/unsigned mismatch
-C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(166,17): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(167,17): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(180,30): warning C4018: '<': signed/unsigned mismatch
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(66,17): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(67,17): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(108,17): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(109,17): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(125,36): warning C4018: '<': signed/unsigned mismatch
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(177,17): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(178,17): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(194,30): warning C4018: '<': signed/unsigned mismatch
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(241,21): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  Generating Code...
   OpenGL.vcxproj -> C:\Users\kanak\Dev\OpenGL\Debug\OpenGL.exe
