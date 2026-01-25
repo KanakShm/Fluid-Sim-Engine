@@ -14,9 +14,10 @@
 
 namespace PhysicsConstants {
 	static constexpr float PI = 3.1415926535f;
-	static constexpr float SMOOTHING_RADIUS = 0.40f;
+	static constexpr float SMOOTHING_RADIUS = 0.2f;
 	static constexpr float MASS = 0.0005f;
 	static constexpr float REST_DENSITY = 1000.0f;
+	static constexpr float VISCOCITY_COEFFICIENT = 0.1;
 	static constexpr float GASS_CONSTANT = 0.420f;
 	static constexpr float GRAVITY = 9.81f;
 }
@@ -49,8 +50,9 @@ constexpr float calculate_r8(float r) {
 	return r4 * r4;
 }
 
-static constexpr float spiky_constant = -45.0f / (PhysicsConstants::PI * calculate_r6(PhysicsConstants::SMOOTHING_RADIUS));
 static constexpr float poly6_kernel = 4.0f / (PhysicsConstants::PI * calculate_r8(PhysicsConstants::SMOOTHING_RADIUS));
+static constexpr float spiky_constant = -45.0f / (PhysicsConstants::PI * calculate_r6(PhysicsConstants::SMOOTHING_RADIUS));
+static constexpr float muller_constant = 45.0f / (PhysicsConstants::PI * calculate_r6(PhysicsConstants::SMOOTHING_RADIUS));
 
 namespace test {
 	class FluidSim2D : public Test
@@ -63,7 +65,7 @@ namespace test {
 			float density;
 			float pressure;
 			glm::vec2 F_pressure;
-			glm::vec2 F_viscocity;
+			glm::vec2 F_viscosity;
 			glm::vec2 F_other;
 			glm::vec3 colour;
 		};
@@ -75,7 +77,7 @@ namespace test {
 		void UpdateParticleDensity();
 		void UpdateParticlePressure();
 
-		void ComputePressureForce();
+		void ComputeForces();
 
 		void OnUpdate(float deltaTime) override;
 		void OnRender() override;

@@ -17,8 +17,8 @@ namespace test {
 			float x = (i % Init::PPR) * Init::SPACING_X / Init::PPR + Init::START_X;
 			float y = (i / Init::PPR) * Init::SPACING_Y / Init::PPR;
 
-			//x += ((std::rand() % 100) / 100.0f) * 0.01f;
-			//y += ((std::rand() % 100) / 100.0f) * 0.01f;
+			x += ((std::rand() % 100) / 100.0f) * 0.01f;
+			y += ((std::rand() % 100) / 100.0f) * 0.01f;
 
 			particles[i].position = glm::vec2(x, y);
 
@@ -26,7 +26,7 @@ namespace test {
 			particles[i].pressure = 0.0f;
 
 			particles[i].F_pressure = glm::vec2(0.0f);
-			particles[i].F_viscocity = glm::vec2(0.0f);
+			particles[i].F_viscosity = glm::vec2(0.0f);
 			particles[i].F_other = glm::vec2(0.0f);
 
 			particles[i].colour = glm::vec3(0.0f, 0.5f, 1.0f);
@@ -164,7 +164,7 @@ namespace test {
 	/*
 		Calculates the force of pressure on each particle using Debrun's spiky kernel
 	*/
-	void FluidSim2D::ComputePressureForce()
+	void FluidSim2D::ComputeForces()
 	{
 		float R2 = PhysicsConstants::SMOOTHING_RADIUS * PhysicsConstants::SMOOTHING_RADIUS;
 
@@ -172,6 +172,7 @@ namespace test {
 			[&](int i) {
 				Particle& particle = particles[i];
 				glm::vec2 f_pressure(0.0f);
+				glm::vec2 f_viscosity(0.0f);
 
 				// get the grid coordinate of that particle
 				int coord_x = std::floor((particle.position.x + 1) / PhysicsConstants::SMOOTHING_RADIUS);
@@ -204,16 +205,20 @@ namespace test {
 							float dist2 = glm::dot(diff, diff);
 
 							if (dist2 < R2 && dist2 > 1e-6f) {
-								// Calculate Spiky gradient
+								// Calculate Spiky gradiant and Laplacian of Viscosity
 								float eucalidian_dist = sqrt(dist2);
 								float term = PhysicsConstants::SMOOTHING_RADIUS - eucalidian_dist;
 								glm::vec2 direction = diff / eucalidian_dist;
 
 								glm::vec2 spiky_gradient = spiky_constant * term * term * direction;
+								const float viscosity_laplacian = muller_constant * term;
 
-								// Calculate Force
+								// Calculate Forces
 								float pressure_avg = 0.5f * (particle.pressure + neighbour.pressure) / neighbour.density;
 								f_pressure += -PhysicsConstants::MASS * pressure_avg * spiky_gradient;
+
+								glm::vec2 v_rel = neighbour.velocity - particle.velocity;
+								f_viscosity += PhysicsConstants::MASS * (v_rel / neighbour.density) * viscosity_laplacian;
 							}
 							target_grid_idx++;
 						}
@@ -221,6 +226,7 @@ namespace test {
 				}
 
 				particle.F_pressure = f_pressure;
+				particle.F_viscosity = PhysicsConstants::VISCOCITY_COEFFICIENT * f_viscosity;
 			}
 		);
 	}
@@ -234,7 +240,7 @@ namespace test {
 		UpdateParticleDensity();
 		UpdateParticlePressure();
 
-		ComputePressureForce();
+		ComputeForces();
 
 		std::for_each(std::execution::par_unseq, particles.begin(), particles.end(), 
 			[&](Particle& particle) {
@@ -242,7 +248,7 @@ namespace test {
 				float dt = curr_time - prev_time;
 				prev_time = curr_time;
 
-				glm::vec2 F_total = particle.F_pressure + PhysicsConstants::MASS * glm::vec2(0.0f, -PhysicsConstants::GRAVITY);
+				glm::vec2 F_total = particle.F_pressure + particle.F_viscosity + PhysicsConstants::MASS * glm::vec2(0.0f, -PhysicsConstants::GRAVITY);
 				particle.acceleration = F_total / PhysicsConstants::MASS;
 				particle.velocity += particle.acceleration * SimulationConstants::DT;
 				particle.position += particle.velocity * SimulationConstants::DT;
