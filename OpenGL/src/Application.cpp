@@ -71,6 +71,10 @@ int main(void)
         testMenu->RegisterTest<test::TestTexture2D>("2D Texture");
         testMenu->RegisterTest<test::FluidSim2D>("Fluid Sim 2D");
 
+        const float FIXED_DT = 0.005f;
+        float accumulator = 0.0f;
+        float last_time = glfwGetTime();
+
         while (!glfwWindowShouldClose(window))
         {
             GLCall(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
@@ -82,7 +86,25 @@ int main(void)
 
             if (currentTest)
             {
-                currentTest->OnUpdate(glfwGetTime());
+                float curr_time = glfwGetTime();
+                float frame_time = curr_time - last_time;
+                last_time = curr_time;
+
+                if (frame_time > 0.25f) frame_time = 0.25f;
+
+                accumulator += frame_time;
+                int steps = 0;
+                int MAX_STEPS = 5;
+
+                while (accumulator >= FIXED_DT && steps < FIXED_DT)
+                {
+                    currentTest->OnUpdate(FIXED_DT);
+                    accumulator -= FIXED_DT;
+                    steps++;
+                }
+                if (steps >= MAX_STEPS) {
+                    accumulator = 0.0f;
+                }
                 currentTest->OnRender();
                 ImGui::Begin("Test");
                 if (currentTest != testMenu && ImGui::Button("<-"))

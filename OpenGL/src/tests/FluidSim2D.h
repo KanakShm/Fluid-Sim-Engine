@@ -14,10 +14,10 @@
 
 namespace PhysicsConstants {
 	static constexpr float PI = 3.1415926535f;
-	static constexpr float SMOOTHING_RADIUS = 0.2f;
+	static constexpr float SMOOTHING_RADIUS = 0.25f;
 	static constexpr float MASS = 0.0005f;
 	static constexpr float REST_DENSITY = 1000.0f;
-	static constexpr float VISCOCITY_COEFFICIENT = 0.1;
+	static constexpr float VISCOCITY_COEFFICIENT = 0.012;
 	static constexpr float GASS_CONSTANT = 0.420f;
 	static constexpr float GRAVITY = 9.81f;
 }
@@ -27,7 +27,7 @@ namespace SimulationConstants {
 	static constexpr int TABLE_SIZE = NO_OF_PARTICLES * 2;
 	static constexpr int PRIME1 = 98561123;
 	static constexpr int PRIME2 = 863421509;
-	static constexpr float DT = 0.005f;
+	static constexpr float DT = 0.01f;
 	static constexpr float DAMPENING = -0.3;
 }
 

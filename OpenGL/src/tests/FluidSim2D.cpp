@@ -12,10 +12,14 @@ namespace test {
 			m_TranslationA(200, 200, 0), m_TranslationB(400, 200, 0), prev_time(glfwGetTime()),
 			particles{std::vector<Particle>(SimulationConstants::NO_OF_PARTICLES)}
 	{
+		float spacing = std::sqrt(PhysicsConstants::MASS / PhysicsConstants::REST_DENSITY);
+		spacing = spacing > PhysicsConstants::SMOOTHING_RADIUS ? PhysicsConstants::SMOOTHING_RADIUS * 0.9f
+			: spacing;
+
 		// Randomly initialise the position of the particles
 		for (int i = 0; i < SimulationConstants::NO_OF_PARTICLES; ++i) {
-			float x = (i % Init::PPR) * Init::SPACING_X / Init::PPR + Init::START_X;
-			float y = (i / Init::PPR) * Init::SPACING_Y / Init::PPR;
+			float x = (i % Init::PPR) * spacing / Init::PPR + Init::START_X;
+			float y = (i / Init::PPR) * spacing / Init::PPR + Init::START_Y;
 
 			x += ((std::rand() % 100) / 100.0f) * 0.01f;
 			y += ((std::rand() % 100) / 100.0f) * 0.01f;
@@ -234,8 +238,10 @@ namespace test {
 	/*
 		Update the position in RAM on the CPU side and sends that data to the GPU
 	*/
-	void FluidSim2D::OnUpdate(float curr_time) 
+	void FluidSim2D::OnUpdate(float dt) 
 	{
+		static int frame_count = 0;
+
 		UpdateSpatialHashGrid();
 		UpdateParticleDensity();
 		UpdateParticlePressure();
@@ -244,14 +250,13 @@ namespace test {
 
 		std::for_each(std::execution::par_unseq, particles.begin(), particles.end(), 
 			[&](Particle& particle) {
-				float curr_time = glfwGetTime();
-				float dt = curr_time - prev_time;
-				prev_time = curr_time;
+				glm::vec2 F_total = particle.F_pressure + 
+									particle.F_viscosity + 
+									PhysicsConstants::MASS * glm::vec2(0.0f, -PhysicsConstants::GRAVITY);
 
-				glm::vec2 F_total = particle.F_pressure + particle.F_viscosity + PhysicsConstants::MASS * glm::vec2(0.0f, -PhysicsConstants::GRAVITY);
 				particle.acceleration = F_total / PhysicsConstants::MASS;
-				particle.velocity += particle.acceleration * SimulationConstants::DT;
-				particle.position += particle.velocity * SimulationConstants::DT;
+				particle.velocity += particle.acceleration * dt;
+				particle.position += particle.velocity * dt;
 
 				// Boundary conditions
 				if (particle.position.x < -1.0) {
@@ -275,6 +280,8 @@ namespace test {
 				}
 			}
 		);
+
+		frame_count++;
 
 		// Upload the updated vector to the existing GPU buffer
 		m_VertexBuffer->Bind();
