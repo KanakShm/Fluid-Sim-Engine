@@ -16,7 +16,7 @@ out vec4 v_Colour;
 void main()
 {
 	gl_Position = vec4(position.x, position.y, 0.0, 1.0);
-	gl_PointSize = 4.0;
+	gl_PointSize = 5.0;
 	v_Colour = vec4(colour.x, colour.y, colour.z, 1.0);
 };
 

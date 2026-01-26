@@ -17,7 +17,7 @@ namespace PhysicsConstants {
 	static constexpr float SMOOTHING_RADIUS = 0.25f;
 	static constexpr float MASS = 0.0005f;
 	static constexpr float REST_DENSITY = 1000.0f;
-	static constexpr float VISCOCITY_COEFFICIENT = 0.012;
+	static constexpr float VISCOCITY_COEFFICIENT = 0.015;
 	static constexpr float GASS_CONSTANT = 0.420f;
 	static constexpr float GRAVITY = 9.81f;
 }
@@ -32,8 +32,8 @@ namespace SimulationConstants {
 }
 
 namespace Init {
-	static constexpr float START_X = -0.5f;
-	static constexpr float START_Y = -0.5f;
+	static constexpr float START_X = 0.5f;
+	static constexpr float START_Y = -0.0f;
 	static constexpr float SPACING_X = 2.5f;
 	static constexpr float SPACING_Y = 2.5f;
 	static constexpr int PPR = 100.0f;
