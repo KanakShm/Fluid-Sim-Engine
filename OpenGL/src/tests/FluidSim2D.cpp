@@ -256,6 +256,10 @@ namespace test {
 
 				particle.acceleration = F_total / PhysicsConstants::MASS;
 				particle.velocity += particle.acceleration * GlobalConstants::DT;
+				float speed2 = glm::dot(particle.velocity, particle.velocity);
+				if (speed2 > SimulationConstants::MAX_SPEED * SimulationConstants::MAX_SPEED) {
+					particle.velocity = glm::normalize(particle.velocity) * SimulationConstants::MAX_SPEED;
+				}
 				particle.position += particle.velocity * GlobalConstants::DT;
 
 				// Boundary conditions

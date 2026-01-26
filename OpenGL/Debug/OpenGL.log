@@ -1,12 +1,4 @@
 ﻿  Scanning sources for module dependencies...
-  TestClearColour.cpp
-C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\Test.h(8,28): warning C4305: 'initializing': truncation from 'double' to 'const float'
-  (compiling source file 'src/tests/TestClearColour.cpp')
-  
-  TestTexture2D.cpp
-C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\Test.h(8,28): warning C4305: 'initializing': truncation from 'double' to 'const float'
-  (compiling source file 'src/tests/TestTexture2D.cpp')
-  
   Application.cpp
 C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\Test.h(8,28): warning C4305: 'initializing': truncation from 'double' to 'const float'
   (compiling source file 'src/Application.cpp')
@@ -14,10 +6,35 @@ C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\Test.h(8,28): warning C4305: 'initial
 C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.h(20,47): warning C4305: 'initializing': truncation from 'double' to 'const float'
   (compiling source file 'src/Application.cpp')
   
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.h(31,39): warning C4305: 'initializing': truncation from 'double' to 'const float'
+  (compiling source file 'src/Application.cpp')
+  
 C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.h(40,27): warning C4244: 'initializing': conversion from 'float' to 'const int', possible loss of data
   (compiling source file 'src/Application.cpp')
   
 C:\Users\kanak\Dev\OpenGL\OpenGL\src\Application.cpp(75,25): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 C:\Users\kanak\Dev\OpenGL\OpenGL\src\Application.cpp(87,33): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+  FluidSim2D.cpp
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\Test.h(8,28): warning C4305: 'initializing': truncation from 'double' to 'const float'
+  (compiling source file 'src/tests/FluidSim2D.cpp')
+  
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.h(20,47): warning C4305: 'initializing': truncation from 'double' to 'const float'
+  (compiling source file 'src/tests/FluidSim2D.cpp')
+  
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.h(31,39): warning C4305: 'initializing': truncation from 'double' to 'const float'
+  (compiling source file 'src/tests/FluidSim2D.cpp')
+  
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.h(40,27): warning C4244: 'initializing': conversion from 'float' to 'const int', possible loss of data
+  (compiling source file 'src/tests/FluidSim2D.cpp')
+  
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(12,71): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(70,17): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(71,17): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(112,17): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(113,17): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(129,36): warning C4018: '<': signed/unsigned mismatch
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(182,17): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(183,17): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(199,30): warning C4018: '<': signed/unsigned mismatch
   Generating Code...
   OpenGL.vcxproj -> C:\Users\kanak\Dev\OpenGL\Debug\OpenGL.exe

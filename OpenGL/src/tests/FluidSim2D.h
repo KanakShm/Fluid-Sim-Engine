@@ -14,21 +14,21 @@
 
 namespace PhysicsConstants {
 	static constexpr float PI = 3.1415926535f;
-	static constexpr float SMOOTHING_RADIUS = 0.25f;
+	static constexpr float SMOOTHING_RADIUS = 0.17f;
 	static constexpr float MASS = 0.0005f;
 	static constexpr float REST_DENSITY = 1000.0f;
-	static constexpr float VISCOCITY_COEFFICIENT = 0.015;
+	static constexpr float VISCOCITY_COEFFICIENT = 0.01;
 	static constexpr float GASS_CONSTANT = 0.420f;
 	static constexpr float GRAVITY = 9.81f;
 }
 
 namespace SimulationConstants {
-	static constexpr int NO_OF_PARTICLES = 1000;
+	static constexpr int NO_OF_PARTICLES = 3000;
 	static constexpr int TABLE_SIZE = NO_OF_PARTICLES * 2;
 	static constexpr int PRIME1 = 98561123;
 	static constexpr int PRIME2 = 863421509;
 	static constexpr float DAMPENING = -0.3f;
-	static constexpr float SAFETY_FACTOR = 0.4f;
+	static constexpr float SAFETY_FACTOR = 0.4;
 	static constexpr float MAX_SPEED = PhysicsConstants::SMOOTHING_RADIUS * SAFETY_FACTOR / GlobalConstants::DT;
 }
 
