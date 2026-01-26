@@ -27,7 +27,7 @@ namespace PhysicsConstants {
 	static constexpr float PI = 3.1415926535f;
 
 	static float SMOOTHING_RADIUS = 0.16f;
-	static float MASS = 0.00005;
+	static float MASS = 1.0f;
 	static float REST_DENSITY = 1000.0f;
 	static float VISCOCITY_COEFFICIENT = 0.01;
 	static float GASS_CONSTANT = 0.420f;
@@ -48,7 +48,7 @@ namespace SimulationConstants {
 	static constexpr int TABLE_SIZE = NO_OF_PARTICLES * 2;
 	static constexpr int PRIME1 = 98561123;
 	static constexpr int PRIME2 = 863421509;
-	static constexpr float SAFETY_FACTOR = 0.4;
+	static constexpr float SAFETY_FACTOR = 0.6f;
 
 	static float DAMPENING = -0.3f;
 	static bool USE_SPATIAL_HASHING = true;
@@ -86,9 +86,12 @@ namespace test {
 
 		void UpdateSpatialHashGrid();
 		void UpdateParticleDensity();
+		void UpdateParticleDensitySHG();
+
 		void UpdateParticlePressure();
 
 		void ComputeForces();
+		void ComputeForcesSHG();
 
 		void OnUpdate() override;
 		void OnRender() override;
@@ -119,6 +122,9 @@ namespace test {
 				std::iota(v.begin(), v.end(), 0);
 				return v;
 			}();
+		
+		std::array<float, 90> frame_buffer = {};
+		int array_offset = 0;
 
 	};
 }
