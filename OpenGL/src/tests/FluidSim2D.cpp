@@ -133,7 +133,7 @@ namespace test {
 
 							if (R2 > eucalidian_dist) {
 								float term = R2 - eucalidian_dist;
-								particle.density += poly6_kernel * term * term * term;
+								particle.density += PhysicsConstants::Poly6Kernal() * term * term * term;
 							}
 
 							target_grid_start_idx++;
@@ -211,8 +211,8 @@ namespace test {
 								float term = PhysicsConstants::SMOOTHING_RADIUS - eucalidian_dist;
 								glm::vec2 direction = diff / eucalidian_dist;
 
-								glm::vec2 spiky_gradient = spiky_constant * term * term * direction;
-								const float viscosity_laplacian = muller_constant * term;
+								glm::vec2 spiky_gradient = PhysicsConstants::SpikeyConstant() * term * term * direction;
+								const float viscosity_laplacian = PhysicsConstants::MullerConstant() * term;
 
 								// Calculate Forces
 								float pressure_avg = 0.5f * (particle.pressure + neighbour.pressure) / neighbour.density;
@@ -254,8 +254,8 @@ namespace test {
 				particle.acceleration = F_total / PhysicsConstants::MASS;
 				particle.velocity += particle.acceleration * GlobalConstants::DT;
 				float speed2 = glm::dot(particle.velocity, particle.velocity);
-				if (speed2 > SimulationConstants::MAX_SPEED * SimulationConstants::MAX_SPEED) {
-					particle.velocity = glm::normalize(particle.velocity) * SimulationConstants::MAX_SPEED;
+				if (speed2 > SimulationConstants::MaxSpeed() * SimulationConstants::MaxSpeed()) {
+					particle.velocity = glm::normalize(particle.velocity) * SimulationConstants::MaxSpeed();
 				}
 				particle.position += particle.velocity * GlobalConstants::DT;
 
@@ -301,5 +301,6 @@ namespace test {
 	void FluidSim2D::OnImGuiRender()
 	{
 		ImGui::Text("Applicaton average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+
 	}
 }

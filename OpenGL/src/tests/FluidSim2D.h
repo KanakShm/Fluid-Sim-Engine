@@ -12,34 +12,6 @@
 #include <algorithm>
 #include <execution>
 
-namespace PhysicsConstants {
-	static constexpr float PI = 3.1415926535f;
-	static constexpr float SMOOTHING_RADIUS = 0.16f;
-	static constexpr float MASS = 0.0005f;
-	static constexpr float REST_DENSITY = 1000.0f;
-	static constexpr float VISCOCITY_COEFFICIENT = 0.01;
-	static constexpr float GASS_CONSTANT = 0.420f;
-	static constexpr float GRAVITY = 9.81f;
-}
-
-namespace SimulationConstants {
-	static constexpr int NO_OF_PARTICLES = 2000;
-	static constexpr int TABLE_SIZE = NO_OF_PARTICLES * 2;
-	static constexpr int PRIME1 = 98561123;
-	static constexpr int PRIME2 = 863421509;
-	static constexpr float DAMPENING = -0.3f;
-	static constexpr float SAFETY_FACTOR = 0.4;
-	static constexpr float MAX_SPEED = PhysicsConstants::SMOOTHING_RADIUS * SAFETY_FACTOR / GlobalConstants::DT;
-}
-
-namespace Init {
-	static constexpr float START_X = -0.5f;
-	static constexpr float START_Y = -0.0f;
-	static constexpr float SPACING_X = 1.5f;
-	static constexpr float SPACING_Y = 1.5f;
-	static constexpr int PPR = 100.0f;
-}
-
 constexpr float calculate_r6(float r) {
 	float r2 = r * r;
 	return r2 * r2 * r2;
@@ -51,9 +23,46 @@ constexpr float calculate_r8(float r) {
 	return r4 * r4;
 }
 
-static constexpr float poly6_kernel = 4.0f / (PhysicsConstants::PI * calculate_r8(PhysicsConstants::SMOOTHING_RADIUS));
-static constexpr float spiky_constant = -45.0f / (PhysicsConstants::PI * calculate_r6(PhysicsConstants::SMOOTHING_RADIUS));
-static constexpr float muller_constant = 45.0f / (PhysicsConstants::PI * calculate_r6(PhysicsConstants::SMOOTHING_RADIUS));
+namespace PhysicsConstants {
+	static constexpr float PI = 3.1415926535f;
+
+	static float SMOOTHING_RADIUS = 0.17f;
+	static float MASS = 0.0005f;
+	static float REST_DENSITY = 1000.0f;
+	static float VISCOCITY_COEFFICIENT = 0.012;
+	static float GASS_CONSTANT = 0.420f;
+	static float GRAVITY = 9.81f;
+	static float Poly6Kernal() {
+		return 4.0f / (PhysicsConstants::PI * calculate_r8(PhysicsConstants::SMOOTHING_RADIUS));
+	}
+	static float SpikeyConstant() {
+		return -45.0f / (PhysicsConstants::PI * calculate_r6(PhysicsConstants::SMOOTHING_RADIUS));
+	}
+	static float MullerConstant() {
+		return 45.0f / (PhysicsConstants::PI * calculate_r6(PhysicsConstants::SMOOTHING_RADIUS));
+	}
+}
+
+namespace SimulationConstants {
+	static constexpr int NO_OF_PARTICLES = 2000;
+	static constexpr int TABLE_SIZE = NO_OF_PARTICLES * 2;
+	static constexpr int PRIME1 = 98561123;
+	static constexpr int PRIME2 = 863421509;
+	static constexpr float SAFETY_FACTOR = 0.4;
+
+	static float DAMPENING = -0.3f;
+	static float MaxSpeed() {
+		return PhysicsConstants::SMOOTHING_RADIUS* SAFETY_FACTOR / GlobalConstants::DT;
+	}
+}
+
+namespace Init {
+	static constexpr float START_X = -0.5f;
+	static constexpr float START_Y = -0.0f;
+	static constexpr float SPACING_X = 1.5f;
+	static constexpr float SPACING_Y = 1.5f;
+	static constexpr int PPR = 100.0f;
+}
 
 namespace test {
 	class FluidSim2D : public Test
