@@ -26,10 +26,10 @@ constexpr float calculate_r8(float r) {
 namespace PhysicsConstants {
 	static constexpr float PI = 3.1415926535f;
 
-	static float SMOOTHING_RADIUS = 0.17f;
-	static float MASS = 0.0005f;
+	static float SMOOTHING_RADIUS = 0.16f;
+	static float MASS = 0.00005;
 	static float REST_DENSITY = 1000.0f;
-	static float VISCOCITY_COEFFICIENT = 0.012;
+	static float VISCOCITY_COEFFICIENT = 0.01;
 	static float GASS_CONSTANT = 0.420f;
 	static float GRAVITY = 9.81f;
 	static float Poly6Kernal() {
@@ -51,6 +51,7 @@ namespace SimulationConstants {
 	static constexpr float SAFETY_FACTOR = 0.4;
 
 	static float DAMPENING = -0.3f;
+	static bool USE_SPATIAL_HASHING = true;
 	static float MaxSpeed() {
 		return PhysicsConstants::SMOOTHING_RADIUS* SAFETY_FACTOR / GlobalConstants::DT;
 	}

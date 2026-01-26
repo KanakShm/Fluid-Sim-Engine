@@ -100,48 +100,66 @@ namespace test {
 		// Iterate through all particles and calculate density
 		float R2 = PhysicsConstants::SMOOTHING_RADIUS * PhysicsConstants::SMOOTHING_RADIUS;
 
-		std::for_each(std::execution::par_unseq, iter_idx.begin(), iter_idx.end(),
-			[&](int i) {
-				Particle& particle = particles[i];
-				particle.density = 0.0f;
+		if (SimulationConstants::USE_SPATIAL_HASHING) {
+			std::for_each(std::execution::par_unseq, iter_idx.begin(), iter_idx.end(),
+				[&](int i) {
+					Particle& particle = particles[i];
+					particle.density = 0.0f;
 
-				// get the grid coordinate of that particle
-				int coord_x = std::floor((particle.position.x + 1) / PhysicsConstants::SMOOTHING_RADIUS);
-				int coord_y = std::floor((particle.position.y + 1) / PhysicsConstants::SMOOTHING_RADIUS);
+					// get the grid coordinate of that particle
+					int coord_x = std::floor((particle.position.x + 1) / PhysicsConstants::SMOOTHING_RADIUS);
+					int coord_y = std::floor((particle.position.y + 1) / PhysicsConstants::SMOOTHING_RADIUS);
 
-				// get surrounding grid coordinates
-				for (int j = -1; j <= 1; ++j) {
-					for (int k = -1; k <= 1; ++k) {
-						int target_x = coord_x + j;
-						int target_y = coord_y + k;
+					// get surrounding grid coordinates
+					for (int j = -1; j <= 1; ++j) {
+						for (int k = -1; k <= 1; ++k) {
+							int target_x = coord_x + j;
+							int target_y = coord_y + k;
 
-						unsigned int hash_x = target_x * SimulationConstants::PRIME1;
-						unsigned int hash_y = target_y * SimulationConstants::PRIME2;
+							unsigned int hash_x = target_x * SimulationConstants::PRIME1;
+							unsigned int hash_y = target_y * SimulationConstants::PRIME2;
 
-						unsigned int raw_hash = hash_x ^ hash_y;
-						int target_grid_hash = raw_hash % SimulationConstants::TABLE_SIZE;
+							unsigned int raw_hash = hash_x ^ hash_y;
+							int target_grid_hash = raw_hash % SimulationConstants::TABLE_SIZE;
 
-						int target_grid_start_idx = indices[target_grid_hash];
-						if (target_grid_start_idx == -1) continue;
-						while (target_grid_start_idx < spatialHash.size() &&
-							spatialHash[target_grid_start_idx][0] == target_grid_hash) {
-							int neighbour_id = spatialHash[target_grid_start_idx][1];
-							const Particle& neighbour = particles[neighbour_id];
+							int target_grid_start_idx = indices[target_grid_hash];
+							if (target_grid_start_idx == -1) continue;
+							while (target_grid_start_idx < spatialHash.size() &&
+								spatialHash[target_grid_start_idx][0] == target_grid_hash) {
+								int neighbour_id = spatialHash[target_grid_start_idx][1];
+								const Particle& neighbour = particles[neighbour_id];
 
-							glm::vec2 diff = particle.position - neighbour.position;
-							float eucalidian_dist = glm::dot(diff, diff);
+								glm::vec2 diff = particle.position - neighbour.position;
+								float eucalidian_dist = glm::dot(diff, diff);
 
-							if (R2 > eucalidian_dist) {
-								float term = R2 - eucalidian_dist;
-								particle.density += PhysicsConstants::Poly6Kernal() * term * term * term;
+								if (R2 > eucalidian_dist) {
+									float term = R2 - eucalidian_dist;
+									particle.density += PhysicsConstants::Poly6Kernal() * term * term * term;
+								}
+
+								target_grid_start_idx++;
 							}
-
-							target_grid_start_idx++;
 						}
 					}
 				}
+			);
+		} else {
+			for (int i = 0; i < particles.size(); ++i) {
+				Particle& particle = particles[i];
+				particle.density = 0.0f;
+
+				for (int j = 0; j < particles.size(); ++j) {
+					Particle& neighbour = particles[j];
+					glm::vec2 diff = particle.position - neighbour.position;
+					float eucalidian_dist = glm::dot(diff, diff);
+
+					if (R2 > eucalidian_dist) {
+						float term = R2 - eucalidian_dist;
+						particle.density += PhysicsConstants::Poly6Kernal() * term * term * term;
+					}
+				}
 			}
-		);
+		}
 	}
 
 	/*
@@ -169,67 +187,101 @@ namespace test {
 	{
 		float R2 = PhysicsConstants::SMOOTHING_RADIUS * PhysicsConstants::SMOOTHING_RADIUS;
 
-		std::for_each(std::execution::par_unseq, iter_idx.begin(), iter_idx.end(),
-			[&](int i) {
+		if (SimulationConstants::USE_SPATIAL_HASHING) {
+			std::for_each(std::execution::par_unseq, iter_idx.begin(), iter_idx.end(),
+				[&](int i) {
+					Particle& particle = particles[i];
+					glm::vec2 f_pressure(0.0f);
+					glm::vec2 f_viscosity(0.0f);
+
+					// get the grid coordinate of that particle
+					int coord_x = std::floor((particle.position.x + 1) / PhysicsConstants::SMOOTHING_RADIUS);
+					int coord_y = std::floor((particle.position.y + 1) / PhysicsConstants::SMOOTHING_RADIUS);
+
+					// get surrounding grid coordinates
+					for (int j = -1; j <= 1; ++j) {
+						for (int k = -1; k <= 1; ++k) {
+							int target_x = coord_x + j;
+							int target_y = coord_y + k;
+
+							unsigned int hash_x = target_x * SimulationConstants::PRIME1;
+							unsigned int hash_y = target_y * SimulationConstants::PRIME2;
+
+							unsigned int raw_hash = hash_x ^ hash_y;
+							int target_grid_hash = raw_hash % SimulationConstants::TABLE_SIZE;
+
+							int target_grid_idx = indices[target_grid_hash];
+							if (target_grid_idx == -1) continue;
+							while (target_grid_idx < spatialHash.size() &&
+								spatialHash[target_grid_idx][0] == target_grid_hash) {
+								int neighbour_idx = spatialHash[target_grid_idx][1];
+								if (neighbour_idx == i) {
+									target_grid_idx++;
+									continue;
+								}
+
+								const Particle& neighbour = particles[neighbour_idx];
+								glm::vec2 diff = particle.position - neighbour.position;
+								float dist2 = glm::dot(diff, diff);
+
+								if (dist2 < R2 && dist2 > 1e-6f) {
+									// Calculate Spiky gradiant and Laplacian of Viscosity
+									float eucalidian_dist = sqrt(dist2);
+									float term = PhysicsConstants::SMOOTHING_RADIUS - eucalidian_dist;
+									glm::vec2 direction = diff / eucalidian_dist;
+
+									glm::vec2 spiky_gradient = PhysicsConstants::SpikeyConstant() * term * term * direction;
+									const float viscosity_laplacian = PhysicsConstants::MullerConstant() * term;
+
+									// Calculate Forces
+									float pressure_avg = 0.5f * (particle.pressure + neighbour.pressure) / neighbour.density;
+									f_pressure += -PhysicsConstants::MASS * pressure_avg * spiky_gradient;
+
+									glm::vec2 v_rel = neighbour.velocity - particle.velocity;
+									f_viscosity += PhysicsConstants::MASS * (v_rel / neighbour.density) * viscosity_laplacian;
+								}
+								target_grid_idx++;
+							}
+						}
+					}
+
+					particle.F_pressure = f_pressure;
+					particle.F_viscosity = PhysicsConstants::VISCOCITY_COEFFICIENT * f_viscosity;
+				}
+			);
+		}
+		else {
+			for (int i = 0; i < particles.size(); ++i) {
 				Particle& particle = particles[i];
 				glm::vec2 f_pressure(0.0f);
 				glm::vec2 f_viscosity(0.0f);
 
-				// get the grid coordinate of that particle
-				int coord_x = std::floor((particle.position.x + 1) / PhysicsConstants::SMOOTHING_RADIUS);
-				int coord_y = std::floor((particle.position.y + 1) / PhysicsConstants::SMOOTHING_RADIUS);
+				for (int j = 0; j < particles.size(); ++j) {
+					const Particle& neighbour = particles[j];
+					glm::vec2 diff = particle.position - neighbour.position;
+					float dist2 = glm::dot(diff, diff);
 
-				// get surrounding grid coordinates
-				for (int j = -1; j <= 1; ++j) {
-					for (int k = -1; k <= 1; ++k) {
-						int target_x = coord_x + j;
-						int target_y = coord_y + k;
+					if (dist2 < R2 && dist2 > 1e-6f) {
+						// Calculate Spiky gradiant and Laplacian of Viscosity
+						float eucalidian_dist = sqrt(dist2);
+						float term = PhysicsConstants::SMOOTHING_RADIUS - eucalidian_dist;
+						glm::vec2 direction = diff / eucalidian_dist;
 
-						unsigned int hash_x = target_x * SimulationConstants::PRIME1;
-						unsigned int hash_y = target_y * SimulationConstants::PRIME2;
+						glm::vec2 spiky_gradient = PhysicsConstants::SpikeyConstant() * term * term * direction;
+						const float viscosity_laplacian = PhysicsConstants::MullerConstant() * term;
 
-						unsigned int raw_hash = hash_x ^ hash_y;
-						int target_grid_hash = raw_hash % SimulationConstants::TABLE_SIZE;
+						// Calculate Forces
+						float pressure_avg = 0.5f * (particle.pressure + neighbour.pressure) / neighbour.density;
+						f_pressure += -PhysicsConstants::MASS * pressure_avg * spiky_gradient;
 
-						int target_grid_idx = indices[target_grid_hash];
-						if (target_grid_idx == -1) continue;
-						while (target_grid_idx < spatialHash.size() &&
-							spatialHash[target_grid_idx][0] == target_grid_hash) {
-							int neighbour_idx = spatialHash[target_grid_idx][1];
-							if (neighbour_idx == i) {
-								target_grid_idx++;
-								continue;
-							}
-
-							const Particle& neighbour = particles[neighbour_idx];
-							glm::vec2 diff = particle.position - neighbour.position;
-							float dist2 = glm::dot(diff, diff);
-
-							if (dist2 < R2 && dist2 > 1e-6f) {
-								// Calculate Spiky gradiant and Laplacian of Viscosity
-								float eucalidian_dist = sqrt(dist2);
-								float term = PhysicsConstants::SMOOTHING_RADIUS - eucalidian_dist;
-								glm::vec2 direction = diff / eucalidian_dist;
-
-								glm::vec2 spiky_gradient = PhysicsConstants::SpikeyConstant() * term * term * direction;
-								const float viscosity_laplacian = PhysicsConstants::MullerConstant() * term;
-
-								// Calculate Forces
-								float pressure_avg = 0.5f * (particle.pressure + neighbour.pressure) / neighbour.density;
-								f_pressure += -PhysicsConstants::MASS * pressure_avg * spiky_gradient;
-
-								glm::vec2 v_rel = neighbour.velocity - particle.velocity;
-								f_viscosity += PhysicsConstants::MASS * (v_rel / neighbour.density) * viscosity_laplacian;
-							}
-							target_grid_idx++;
-						}
+						glm::vec2 v_rel = neighbour.velocity - particle.velocity;
+						f_viscosity += PhysicsConstants::MASS * (v_rel / neighbour.density) * viscosity_laplacian;
 					}
 				}
-
 				particle.F_pressure = f_pressure;
 				particle.F_viscosity = PhysicsConstants::VISCOCITY_COEFFICIENT * f_viscosity;
 			}
-		);
+		}
 	}
 
 	/*
@@ -301,6 +353,13 @@ namespace test {
 	void FluidSim2D::OnImGuiRender()
 	{
 		ImGui::Text("Applicaton average %.3f ms/frame (%.1f FPS)", 1000.0f / ImGui::GetIO().Framerate, ImGui::GetIO().Framerate);
+		ImGui::SliderFloat("Density (kg/m^2)", &PhysicsConstants::REST_DENSITY, 1.0f, 1415.0f);
+		ImGui::SliderFloat("Viscosity (Pa*s)", &PhysicsConstants::VISCOCITY_COEFFICIENT, 0.001f, 0.1f);
+		ImGui::SliderFloat("Mass of each drop (Kg)", &PhysicsConstants::MASS, 0.05f, 0.10f);
+		ImGui::SliderFloat("Gravity (m/s^2)", &PhysicsConstants::GRAVITY, 1.0f, 25.0f);
+		ImGui::SliderFloat("Wall Damping", &SimulationConstants::DAMPENING, -1.0f, 1.0f);
+		ImGui::SliderFloat("Smoothing Radius", &PhysicsConstants::SMOOTHING_RADIUS, 0.05f, 3.0f);
 
+		ImGui::Checkbox("Use Spatial Hashing", &SimulationConstants::USE_SPATIAL_HASHING);
 	}
 }
