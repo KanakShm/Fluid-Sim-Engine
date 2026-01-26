@@ -48,7 +48,7 @@ namespace SimulationConstants {
 	static constexpr int TABLE_SIZE = NO_OF_PARTICLES * 2;
 	static constexpr int PRIME1 = 98561123;
 	static constexpr int PRIME2 = 863421509;
-	static constexpr float SAFETY_FACTOR = 0.6f;
+	static constexpr float SAFETY_FACTOR = 0.40f;
 
 	static float DAMPENING = -0.3f;
 	static bool USE_SPATIAL_HASHING = true;

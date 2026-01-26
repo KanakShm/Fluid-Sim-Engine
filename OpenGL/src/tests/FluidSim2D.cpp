@@ -366,7 +366,7 @@ namespace test {
 
 	void FluidSim2D::OnImGuiRender()
 	{
-		int framerate = ImGui::GetIO().Framerate;
+		float framerate = ImGui::GetIO().Framerate;
 		frame_buffer[array_offset] = framerate;
 
 		array_offset = (array_offset + 1) % frame_buffer.size();
@@ -382,6 +382,7 @@ namespace test {
 
 		ImGui::Text("Applicaton average %.3f ms/frame (%.1f FPS)", 1000.0f / framerate, framerate);
 		ImGui::Checkbox("Use Spatial Hashing", &SimulationConstants::USE_SPATIAL_HASHING);
+		ImGui::Separator();
 
 		ImGui::SliderFloat("Density (kg/m^2)", &PhysicsConstants::REST_DENSITY, 1.0f, 1415.0f);
 		ImGui::SliderFloat("Viscosity (Pa*s)", &PhysicsConstants::VISCOCITY_COEFFICIENT, 0.001f, 0.1f);
