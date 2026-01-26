@@ -33,10 +33,10 @@ namespace SimulationConstants {
 }
 
 namespace Init {
-	static constexpr float START_X = 0.5f;
+	static constexpr float START_X = -0.5f;
 	static constexpr float START_Y = -0.0f;
-	static constexpr float SPACING_X = 2.5f;
-	static constexpr float SPACING_Y = 2.5f;
+	static constexpr float SPACING_X = 1.5f;
+	static constexpr float SPACING_Y = 1.5f;
 	static constexpr int PPR = 100.0f;
 }
 

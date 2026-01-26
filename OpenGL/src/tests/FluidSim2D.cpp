@@ -12,14 +12,11 @@ namespace test {
 			m_TranslationA(200, 200, 0), m_TranslationB(400, 200, 0), prev_time(glfwGetTime()),
 			particles{std::vector<Particle>(SimulationConstants::NO_OF_PARTICLES)}
 	{
-		float spacing = std::sqrt(PhysicsConstants::MASS / PhysicsConstants::REST_DENSITY);
-		spacing = spacing > PhysicsConstants::SMOOTHING_RADIUS ? PhysicsConstants::SMOOTHING_RADIUS * 0.9f
-			: spacing;
 
 		// Randomly initialise the position of the particles
 		for (int i = 0; i < SimulationConstants::NO_OF_PARTICLES; ++i) {
-			float x = (i % Init::PPR) * spacing / Init::PPR + Init::START_X;
-			float y = (i / Init::PPR) * spacing / Init::PPR + Init::START_Y;
+			float x = (i % Init::PPR) * Init::SPACING_X / Init::PPR + Init::START_X;
+			float y = (i / Init::PPR) * Init::SPACING_Y / Init::PPR + Init::START_Y;
 
 			x += ((std::rand() % 100) / 100.0f) * 0.01f;
 			y += ((std::rand() % 100) / 100.0f) * 0.01f;
