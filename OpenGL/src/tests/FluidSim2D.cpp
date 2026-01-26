@@ -238,7 +238,7 @@ namespace test {
 	/*
 		Update the position in RAM on the CPU side and sends that data to the GPU
 	*/
-	void FluidSim2D::OnUpdate(float dt) 
+	void FluidSim2D::OnUpdate() 
 	{
 		static int frame_count = 0;
 
@@ -255,8 +255,8 @@ namespace test {
 									PhysicsConstants::MASS * glm::vec2(0.0f, -PhysicsConstants::GRAVITY);
 
 				particle.acceleration = F_total / PhysicsConstants::MASS;
-				particle.velocity += particle.acceleration * dt;
-				particle.position += particle.velocity * dt;
+				particle.velocity += particle.acceleration * GlobalConstants::DT;
+				particle.position += particle.velocity * GlobalConstants::DT;
 
 				// Boundary conditions
 				if (particle.position.x < -1.0) {

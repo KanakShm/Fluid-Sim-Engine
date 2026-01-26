@@ -4,6 +4,10 @@
 #include <string>
 #include <iostream>
 
+namespace GlobalConstants {
+	static constexpr float DT = 0.005;
+}
+
 namespace test {
 	class Test
 	{
@@ -11,7 +15,7 @@ namespace test {
 		Test() {}
 		virtual ~Test() {}
 
-		virtual void OnUpdate(float deltaTime) {}
+		virtual void OnUpdate() {}
 		virtual void OnRender() {}
 		virtual void OnImGuiRender() {}
 	};

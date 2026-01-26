@@ -71,10 +71,8 @@ int main(void)
         testMenu->RegisterTest<test::TestTexture2D>("2D Texture");
         testMenu->RegisterTest<test::FluidSim2D>("Fluid Sim 2D");
 
-        const float FIXED_DT = 0.005f;
         float accumulator = 0.0f;
         float last_time = glfwGetTime();
-
         while (!glfwWindowShouldClose(window))
         {
             GLCall(glClearColor(0.0f, 0.0f, 0.0f, 1.0f));
@@ -96,10 +94,10 @@ int main(void)
                 int steps = 0;
                 int MAX_STEPS = 5;
 
-                while (accumulator >= FIXED_DT && steps < FIXED_DT)
+                while (accumulator >= GlobalConstants::DT && steps < GlobalConstants::DT)
                 {
-                    currentTest->OnUpdate(FIXED_DT);
-                    accumulator -= FIXED_DT;
+                    currentTest->OnUpdate();
+                    accumulator -= GlobalConstants::DT;
                     steps++;
                 }
                 if (steps >= MAX_STEPS) {

@@ -27,8 +27,9 @@ namespace SimulationConstants {
 	static constexpr int TABLE_SIZE = NO_OF_PARTICLES * 2;
 	static constexpr int PRIME1 = 98561123;
 	static constexpr int PRIME2 = 863421509;
-	static constexpr float DT = 0.01f;
-	static constexpr float DAMPENING = -0.3;
+	static constexpr float DAMPENING = -0.3f;
+	static constexpr float SAFETY_FACTOR = 0.4f;
+	static constexpr float MAX_SPEED = PhysicsConstants::SMOOTHING_RADIUS * SAFETY_FACTOR / GlobalConstants::DT;
 }
 
 namespace Init {
@@ -79,7 +80,7 @@ namespace test {
 
 		void ComputeForces();
 
-		void OnUpdate(float deltaTime) override;
+		void OnUpdate() override;
 		void OnRender() override;
 		void OnImGuiRender() override;
 
