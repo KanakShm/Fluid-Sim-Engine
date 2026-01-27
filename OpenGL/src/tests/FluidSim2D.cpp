@@ -296,10 +296,15 @@ namespace test {
 	glm::vec2 FluidSim2D::GetMouseWorldPos()
 	{
 		ImVec2 mouse_pos = ImGui::GetMousePos();
+		ImVec2 win_pos = ImGui::GetWindowPos();
 
-		float width_norm = (2.0f * mouse_pos.x) / GlobalConstants::WINDOW_HEIGHT - 1.0f;
-		float height_norm = 1.0f - (2.0f * mouse_pos.y) / GlobalConstants::WINDOW_HEIGHT;
-		return glm::vec2(height_norm, width_norm);
+		float local_x = mouse_pos.x - win_pos.x;
+		float local_y = mouse_pos.y - win_pos.y;
+
+		float width_norm = (2.0f * local_x) / GlobalConstants::WINDOW_WIDTH - 1.0f;
+		float height_norm = 1.0f - (2.0f * local_y) / GlobalConstants::WINDOW_HEIGHT;
+
+		return glm::vec2(width_norm, height_norm);
 	}
 
 	void FluidSim2D::HandleMouseInteraction()
@@ -311,7 +316,7 @@ namespace test {
 			float grab_radius2 = SimulationConstants::GRAB_RADIUS * SimulationConstants::GRAB_RADIUS;
 			int search_range = std::ceil(SimulationConstants::GRAB_RADIUS / PhysicsConstants::SMOOTHING_RADIUS);
 
-			// get the grid coordinate of that particle
+			// get the grid coordinate of the click
 			int coord_x = std::floor((mouse_pos.x + 1) / PhysicsConstants::SMOOTHING_RADIUS);
 			int coord_y = std::floor((mouse_pos.y + 1) / PhysicsConstants::SMOOTHING_RADIUS);
 
@@ -440,6 +445,7 @@ namespace test {
 		float framerate = ImGui::GetIO().Framerate;
 		frame_buffer[array_offset] = framerate;
 
+		// Draw the FPS graph
 		array_offset = (array_offset + 1) % frame_buffer.size();
 		ImGui::PlotLines("FPS",
 			frame_buffer.data(),
@@ -461,6 +467,27 @@ namespace test {
 		ImGui::SliderFloat("Gravity (m/s^2)", &PhysicsConstants::GRAVITY, 1.0f, 25.0f);
 		ImGui::SliderFloat("Wall Damping", &SimulationConstants::DAMPENING, -1.0f, 1.0f);
 		ImGui::SliderFloat("Smoothing Radius", &PhysicsConstants::SMOOTHING_RADIUS, 0.05f, 3.0f);
+		ImGui::Separator();
+
+		ImGui::SliderFloat("Grab Radius", &SimulationConstants::GRAB_RADIUS, 0.1f, 1.0f);
+		ImGui::SliderFloat("Grab Strength", &SimulationConstants::GRAB_STRENGTH, -25000.0f, 25000.0f);
+
+		// Draw the grab radius
+		ImVec2 mouse_pos = ImGui::GetMousePos();
+		float pixel_radius = SimulationConstants::GRAB_RADIUS * (GlobalConstants::WINDOW_HEIGHT / 2.0f) / 2.0f;
+
+		ImU32 circle_color = ImGui::IsMouseDown(ImGuiMouseButton_Left)
+			? IM_COL32(255, 50, 50, 255)
+			: IM_COL32(255, 255, 255, 150);
+
+		ImGui::GetForegroundDrawList()->AddCircle(
+			mouse_pos, 
+			pixel_radius, 
+			circle_color, 
+			32, 
+			1.5f
+		);
+
 
 	}
 }

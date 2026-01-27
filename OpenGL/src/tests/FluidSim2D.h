@@ -29,7 +29,7 @@ namespace PhysicsConstants {
 	static float SMOOTHING_RADIUS = 0.16f;
 	static float MASS = 1.0f;
 	static float REST_DENSITY = 1000.0f;
-	static float VISCOCITY_COEFFICIENT = 0.01;
+	static float VISCOCITY_COEFFICIENT = 0.016;
 	static float GASS_CONSTANT = 0.420f;
 	static float GRAVITY = 9.81f;
 	static float Poly6Kernal() {
@@ -44,7 +44,7 @@ namespace PhysicsConstants {
 }
 
 namespace SimulationConstants {
-	static constexpr int NO_OF_PARTICLES = 2000;
+	static constexpr int NO_OF_PARTICLES = 2500;
 	static constexpr int TABLE_SIZE = NO_OF_PARTICLES * 2;
 	static constexpr int PRIME1 = 98561123;
 	static constexpr int PRIME2 = 863421509;
@@ -52,7 +52,7 @@ namespace SimulationConstants {
 
 	static float DAMPENING = -0.3f;
 	static float GRAB_RADIUS = 0.3f;
-	static float GRAB_STRENGTH = 25000.0f;
+	static float GRAB_STRENGTH = 10000.0f;
 	static bool USE_SPATIAL_HASHING = true;
 	static float MaxSpeed() {
 		return PhysicsConstants::SMOOTHING_RADIUS* SAFETY_FACTOR / GlobalConstants::DT;
