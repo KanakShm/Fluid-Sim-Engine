@@ -1,10 +1,10 @@
 C:\Users\kanak\Dev\OpenGL\OpenGL\src\IndexBuffer.cpp;C:\Users\kanak\Dev\OpenGL\OpenGL\Debug\IndexBuffer.obj
 C:\Users\kanak\Dev\OpenGL\OpenGL\src\Renderer.cpp;C:\Users\kanak\Dev\OpenGL\OpenGL\Debug\Renderer.obj
 C:\Users\kanak\Dev\OpenGL\OpenGL\src\Shader.cpp;C:\Users\kanak\Dev\OpenGL\OpenGL\Debug\Shader.obj
-C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp;C:\Users\kanak\Dev\OpenGL\OpenGL\Debug\FluidSim2D.obj
-C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\Test.cpp;C:\Users\kanak\Dev\OpenGL\OpenGL\Debug\Test.obj
-C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\TestClearColour.cpp;C:\Users\kanak\Dev\OpenGL\OpenGL\Debug\TestClearColour.obj
-C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\TestTexture2D.cpp;C:\Users\kanak\Dev\OpenGL\OpenGL\Debug\TestTexture2D.obj
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\simulations\FluidSim2D.cpp;C:\Users\kanak\Dev\OpenGL\OpenGL\Debug\FluidSim2D.obj
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\simulations\Simulation.cpp;C:\Users\kanak\Dev\OpenGL\OpenGL\Debug\Simulation.obj
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\simulations\TestClearColour.cpp;C:\Users\kanak\Dev\OpenGL\OpenGL\Debug\TestClearColour.obj
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\simulations\TestTexture2D.cpp;C:\Users\kanak\Dev\OpenGL\OpenGL\Debug\TestTexture2D.obj
 C:\Users\kanak\Dev\OpenGL\OpenGL\src\Texture.cpp;C:\Users\kanak\Dev\OpenGL\OpenGL\Debug\Texture.obj
 C:\Users\kanak\Dev\OpenGL\OpenGL\src\vendor\glm\detail\glm.cpp;C:\Users\kanak\Dev\OpenGL\OpenGL\Debug\glm.obj
 C:\Users\kanak\Dev\OpenGL\OpenGL\src\vendor\glm\glm.cppm;C:\Users\kanak\Dev\OpenGL\OpenGL\Debug\glm.cppm.obj
@@ -15,7 +15,7 @@ C:\Users\kanak\Dev\OpenGL\OpenGL\src\vendor\imgui\imgui_impl_glfw.cpp;C:\Users\k
 C:\Users\kanak\Dev\OpenGL\OpenGL\src\vendor\imgui\imgui_impl_opengl3.cpp;C:\Users\kanak\Dev\OpenGL\OpenGL\Debug\imgui_impl_opengl3.obj
 C:\Users\kanak\Dev\OpenGL\OpenGL\src\vendor\imgui\imgui_tables.cpp;C:\Users\kanak\Dev\OpenGL\OpenGL\Debug\imgui_tables.obj
 C:\Users\kanak\Dev\OpenGL\OpenGL\src\vendor\imgui\imgui_widgets.cpp;C:\Users\kanak\Dev\OpenGL\OpenGL\Debug\imgui_widgets.obj
-C:\Users\kanak\Dev\OpenGL\OpenGL\src\vendor\stb_image.cpp;C:\Users\kanak\Dev\OpenGL\OpenGL\Debug\stb_image.obj
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\vendor\stb\stb_image.cpp;C:\Users\kanak\Dev\OpenGL\OpenGL\Debug\stb_image.obj
 C:\Users\kanak\Dev\OpenGL\OpenGL\src\VertexArray.cpp;C:\Users\kanak\Dev\OpenGL\OpenGL\Debug\VertexArray.obj
 C:\Users\kanak\Dev\OpenGL\OpenGL\src\VertexBuffer.cpp;C:\Users\kanak\Dev\OpenGL\OpenGL\Debug\VertexBuffer.obj
 C:\Users\kanak\Dev\OpenGL\OpenGL\src\Application.cpp;C:\Users\kanak\Dev\OpenGL\OpenGL\Debug\Application.obj

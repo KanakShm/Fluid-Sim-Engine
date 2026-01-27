@@ -19,9 +19,9 @@
 #include "imgui/imgui_impl_glfw.h"
 #include "imgui/imgui_impl_opengl3.h"
 
-#include "tests/TestClearColour.h"
-#include "tests/TestTexture2D.h"
-#include "tests/FluidSim2D.h"
+#include "simulations/TestClearColour.h"
+#include "simulations/TestTexture2D.h"
+#include "simulations/FluidSim2D.h"
 
 int main(void)
 {
@@ -63,13 +63,13 @@ int main(void)
         ImGui_ImplOpenGL3_Init("#version 330");
         ImGui::StyleColorsDark();
 
-        test::Test* currentTest = nullptr;
-        test::TestMenu* testMenu = new test::TestMenu(currentTest);
-        currentTest = testMenu;
+        simulation::Simulation* currentTest = nullptr;
+        simulation::SimulationMenu* simulationMenu = new simulation::SimulationMenu(currentTest);
+        currentTest = simulationMenu;
 
-        testMenu->RegisterTest<test::TestClearColour>("Clear Colour");
-        testMenu->RegisterTest<test::TestTexture2D>("2D Texture");
-        testMenu->RegisterTest<test::FluidSim2D>("Fluid Sim 2D");
+        simulationMenu->RegisterSimulation<simulation::TestClearColour>("Clear Colour");
+        simulationMenu->RegisterSimulation<simulation::TestTexture2D>("2D Texture");
+        simulationMenu->RegisterSimulation<simulation::FluidSim2D>("Fluid Sim 2D");
 
         float accumulator = 0.0f;
         float last_time = glfwGetTime();
@@ -105,10 +105,10 @@ int main(void)
                 }
                 currentTest->OnRender();
                 ImGui::Begin("Test");
-                if (currentTest != testMenu && ImGui::Button("<-"))
+                if (currentTest != simulationMenu && ImGui::Button("<-"))
                 {
                     delete currentTest;
-                    currentTest = testMenu;
+                    currentTest = simulationMenu;
                 }
                 currentTest->OnImGuiRender();
                 ImGui::End();
@@ -121,8 +121,8 @@ int main(void)
             GLCall(glfwPollEvents());
         }
         delete currentTest;
-        if (currentTest != testMenu)
-            delete testMenu;
+        if (currentTest != simulationMenu)
+            delete simulationMenu;
     }
 
     ImGui_ImplOpenGL3_Shutdown();

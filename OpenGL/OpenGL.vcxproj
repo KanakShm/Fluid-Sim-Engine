@@ -148,10 +148,10 @@
     <ClCompile Include="src\IndexBuffer.cpp" />
     <ClCompile Include="src\Renderer.cpp" />
     <ClCompile Include="src\Shader.cpp" />
-    <ClCompile Include="src\tests\FluidSim2D.cpp" />
-    <ClCompile Include="src\tests\Test.cpp" />
-    <ClCompile Include="src\tests\TestClearColour.cpp" />
-    <ClCompile Include="src\tests\TestTexture2D.cpp" />
+    <ClCompile Include="src\simulations\FluidSim2D.cpp" />
+    <ClCompile Include="src\simulations\Simulation.cpp" />
+    <ClCompile Include="src\simulations\TestClearColour.cpp" />
+    <ClCompile Include="src\simulations\TestTexture2D.cpp" />
     <ClCompile Include="src\Texture.cpp" />
     <ClCompile Include="src\vendor\glm\detail\glm.cpp" />
     <ClCompile Include="src\vendor\glm\glm.cppm" />
@@ -162,23 +162,24 @@
     <ClCompile Include="src\vendor\imgui\imgui_impl_opengl3.cpp" />
     <ClCompile Include="src\vendor\imgui\imgui_tables.cpp" />
     <ClCompile Include="src\vendor\imgui\imgui_widgets.cpp" />
-    <ClCompile Include="src\vendor\stb_image.cpp" />
+    <ClCompile Include="src\vendor\stb\stb_image.cpp" />
     <ClCompile Include="src\VertexArray.cpp" />
     <ClCompile Include="src\VertexBuffer.cpp" />
     <Text Include="res\shaders\Basic.shader">
       <FileType>Document</FileType>
     </Text>
     <ClCompile Include="src\Application.cpp" />
+    <Text Include="CMakeLists.txt" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Texture.h" />
     <ClInclude Include="src\IndexBuffer.h" />
     <ClInclude Include="src\Renderer.h" />
     <ClInclude Include="src\Shader.h" />
-    <ClInclude Include="src\tests\FluidSim2D.h" />
-    <ClInclude Include="src\tests\Test.h" />
-    <ClInclude Include="src\tests\TestClearColour.h" />
-    <ClInclude Include="src\tests\TestTexture2D.h" />
+    <ClInclude Include="src\simulations\FluidSim2D.h" />
+    <ClInclude Include="src\simulations\Simulation.h" />
+    <ClInclude Include="src\simulations\TestClearColour.h" />
+    <ClInclude Include="src\simulations\TestTexture2D.h" />
     <ClInclude Include="src\Texture.h" />
     <ClInclude Include="src\vendor\glm\common.hpp" />
     <ClInclude Include="src\vendor\glm\detail\compute_common.hpp" />
@@ -479,7 +480,7 @@
     <ClInclude Include="src\vendor\imgui\imstb_rectpack.h" />
     <ClInclude Include="src\vendor\imgui\imstb_textedit.h" />
     <ClInclude Include="src\vendor\imgui\imstb_truetype.h" />
-    <ClInclude Include="src\vendor\stb_image.h" />
+    <ClInclude Include="src\vendor\stb\stb_image.h" />
     <ClInclude Include="src\VertexArray.h" />
     <ClInclude Include="src\VertexBuffer.h" />
     <ClInclude Include="src\VertexBufferLayout.h" />

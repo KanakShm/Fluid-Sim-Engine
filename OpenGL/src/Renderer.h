@@ -1,12 +1,22 @@
 #pragma once
 
 #include <GL/glew.h>
+#include <signal.h>
 
 #include "VertexArray.h"
 #include "IndexBuffer.h"
 #include "Shader.h"
 
-#define ASSERT(x) if (!(x)) __debugbreak();
+#ifdef _MSC_VER
+    #define DEBUG_BREAK() __debugbreak();
+#elif defined(__EMSCRIPTEN__)
+    #include <stdlib.h>
+    #define DEBUG_BREAK() abort();
+#else
+    #define DEBUG_BREAK() __builtin_trap();
+#endif
+
+#define ASSERT(x) if (!(x)) DEBUG_BREAK();
 #define GLCall(x) GLClearError();\
     x;\
     ASSERT(GLLogCall(#x, __FILE__, __LINE__))
