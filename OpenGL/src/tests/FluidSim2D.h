@@ -28,7 +28,7 @@ namespace PhysicsConstants {
 
 	static float SMOOTHING_RADIUS = 0.16f;
 	static float MASS = 1.0f;
-	static float REST_DENSITY = 1000.0f;
+	static float REST_DENSITY = 1415.0f;
 	static float VISCOCITY_COEFFICIENT = 0.016;
 	static float GASS_CONSTANT = 0.420f;
 	static float GRAVITY = 9.81f;
@@ -52,7 +52,7 @@ namespace SimulationConstants {
 
 	static float DAMPENING = -0.3f;
 	static float GRAB_RADIUS = 0.3f;
-	static float GRAB_STRENGTH = 10000.0f;
+	static float GRAB_STRENGTH = -12000.0f;
 	static bool USE_SPATIAL_HASHING = true;
 	static float MaxSpeed() {
 		return PhysicsConstants::SMOOTHING_RADIUS* SAFETY_FACTOR / GlobalConstants::DT;

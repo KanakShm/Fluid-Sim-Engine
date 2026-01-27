@@ -461,7 +461,7 @@ namespace test {
 		ImGui::Checkbox("Use Spatial Hashing", &SimulationConstants::USE_SPATIAL_HASHING);
 		ImGui::Separator();
 
-		ImGui::SliderFloat("Density (kg/m^2)", &PhysicsConstants::REST_DENSITY, 1.0f, 1415.0f);
+		ImGui::SliderFloat("Density (kg/m^2)", &PhysicsConstants::REST_DENSITY, 1.0f, 3000.0f);
 		ImGui::SliderFloat("Viscosity (Pa*s)", &PhysicsConstants::VISCOCITY_COEFFICIENT, 0.001f, 0.1f);
 		ImGui::SliderFloat("Volume of each drop (m^2)", &PhysicsConstants::MASS, 0.25f, 1.5f);
 		ImGui::SliderFloat("Gravity (m/s^2)", &PhysicsConstants::GRAVITY, 1.0f, 25.0f);
