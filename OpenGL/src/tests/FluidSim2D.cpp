@@ -293,12 +293,82 @@ namespace test {
 		);
 	}
 
+	glm::vec2 FluidSim2D::GetMouseWorldPos()
+	{
+		ImVec2 mouse_pos = ImGui::GetMousePos();
+
+		float width_norm = (2.0f * mouse_pos.x) / GlobalConstants::WINDOW_HEIGHT - 1.0f;
+		float height_norm = 1.0f - (2.0f * mouse_pos.y) / GlobalConstants::WINDOW_HEIGHT;
+		return glm::vec2(height_norm, width_norm);
+	}
+
+	void FluidSim2D::HandleMouseInteraction()
+	{
+		// Get the particles that are in range of radius
+		glm::vec2 mouse_pos = GetMouseWorldPos();
+		if (ImGui::IsMouseDown(ImGuiMouseButton_Left))
+		{
+			float grab_radius2 = SimulationConstants::GRAB_RADIUS * SimulationConstants::GRAB_RADIUS;
+			int search_range = std::ceil(SimulationConstants::GRAB_RADIUS / PhysicsConstants::SMOOTHING_RADIUS);
+
+			// get the grid coordinate of that particle
+			int coord_x = std::floor((mouse_pos.x + 1) / PhysicsConstants::SMOOTHING_RADIUS);
+			int coord_y = std::floor((mouse_pos.y + 1) / PhysicsConstants::SMOOTHING_RADIUS);
+
+			// get surrounding grid coordinates
+			for (int j = -search_range; j <= search_range; ++j) {
+				for (int k = -search_range; k <= search_range; ++k) {
+					int target_x = coord_x + j;
+					int target_y = coord_y + k;
+
+					unsigned int hash_x = target_x * SimulationConstants::PRIME1;
+					unsigned int hash_y = target_y * SimulationConstants::PRIME2;
+
+					unsigned int raw_hash = hash_x ^ hash_y;
+					int target_grid_hash = raw_hash % SimulationConstants::TABLE_SIZE;
+
+					int target_grid_idx = indices[target_grid_hash];
+					if (target_grid_idx == -1) continue;
+					while (target_grid_idx < spatialHash.size() &&
+						spatialHash[target_grid_idx][0] == target_grid_hash) {
+						int neighbour_idx = spatialHash[target_grid_idx][1];
+
+						Particle& neighbour = particles[neighbour_idx];
+						glm::vec2 diff = mouse_pos - neighbour.position;
+						float dist2 = glm::dot(diff, diff);
+
+						if (dist2 < grab_radius2) {
+							float falloff = grab_radius2 - dist2;
+							glm::vec2 force = diff * falloff * SimulationConstants::GRAB_STRENGTH;
+							neighbour.F_other += force;
+						}
+						target_grid_idx++;
+					}
+				}
+			}
+		}
+	}
+
+	void FluidSim2D::ResetForces()
+	{
+		std::for_each(std::execution::par_unseq, iter_idx.begin(), iter_idx.end(),
+			[&](int i)
+			{
+				Particle& particle = particles[i];
+				particle.F_pressure = glm::vec2(0);
+				particle.F_viscosity = glm::vec2(0);
+				particle.F_other = glm::vec2(0);
+			});
+	}
+
 	/*
 		Update the position in RAM on the CPU side and sends that data to the GPU
 	*/
 	void FluidSim2D::OnUpdate() 
 	{
 		static int frame_count = 0;
+		ResetForces();
+		HandleMouseInteraction();
 
 		if (SimulationConstants::USE_SPATIAL_HASHING) {
 			UpdateSpatialHashGrid();
@@ -313,8 +383,9 @@ namespace test {
 
 		std::for_each(std::execution::par_unseq, particles.begin(), particles.end(), 
 			[&](Particle& particle) {
-				glm::vec2 F_total = particle.F_pressure + 
-									particle.F_viscosity + 
+				glm::vec2 F_total = particle.F_pressure +
+									particle.F_viscosity +
+									particle.F_other +
 									PhysicsConstants::MASS * glm::vec2(0.0f, -PhysicsConstants::GRAVITY);
 
 				particle.acceleration = F_total / PhysicsConstants::MASS;

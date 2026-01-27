@@ -51,6 +51,8 @@ namespace SimulationConstants {
 	static constexpr float SAFETY_FACTOR = 0.40f;
 
 	static float DAMPENING = -0.3f;
+	static float GRAB_RADIUS = 0.3f;
+	static float GRAB_STRENGTH = 25000.0f;
 	static bool USE_SPATIAL_HASHING = true;
 	static float MaxSpeed() {
 		return PhysicsConstants::SMOOTHING_RADIUS* SAFETY_FACTOR / GlobalConstants::DT;
@@ -83,6 +85,10 @@ namespace test {
 
 		FluidSim2D();
 		~FluidSim2D();
+
+		void ResetForces();
+		glm::vec2 GetMouseWorldPos();
+		void HandleMouseInteraction();
 
 		void UpdateSpatialHashGrid();
 		void UpdateParticleDensity();

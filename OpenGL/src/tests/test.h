@@ -5,6 +5,8 @@
 #include <iostream>
 
 namespace GlobalConstants {
+	static constexpr int WINDOW_HEIGHT = 960;
+	static constexpr int WINDOW_WIDTH = 2000;
 	static constexpr float DT = 0.005;
 }
 

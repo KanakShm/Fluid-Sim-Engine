@@ -1,12 +1,12 @@
 ﻿  Scanning sources for module dependencies...
   FluidSim2D.cpp
-C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\Test.h(8,28): warning C4305: 'initializing': truncation from 'double' to 'const float'
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\Test.h(10,28): warning C4305: 'initializing': truncation from 'double' to 'const float'
   (compiling source file 'src/tests/FluidSim2D.cpp')
   
 C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.h(32,37): warning C4305: 'initializing': truncation from 'double' to 'float'
   (compiling source file 'src/tests/FluidSim2D.cpp')
   
-C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.h(65,27): warning C4244: 'initializing': conversion from 'float' to 'const int', possible loss of data
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.h(67,27): warning C4244: 'initializing': conversion from 'float' to 'const int', possible loss of data
   (compiling source file 'src/tests/FluidSim2D.cpp')
   
 C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(12,71): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
@@ -22,4 +22,8 @@ C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(197,22): warning C4018
 C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(240,17): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
 C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(241,17): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
 C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(257,30): warning C4018: '<': signed/unsigned mismatch
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(312,21): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(315,16): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(316,16): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
+C:\Users\kanak\Dev\OpenGL\OpenGL\src\tests\FluidSim2D.cpp(332,29): warning C4018: '<': signed/unsigned mismatch
   OpenGL.vcxproj -> C:\Users\kanak\Dev\OpenGL\Debug\OpenGL.exe
