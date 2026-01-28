@@ -106,8 +106,8 @@ int main(void)
         int browserWidth = emscripten_run_script_int("window.innerWidth");
         int browserHeight = emscripten_run_script_int("window.innerHeight");
 
-        windowWidth = (int)(browserWidth * 0.80);
-        windowHeight = (int)(browserHeight * 0.80);
+        windowWidth = (int)(browserWidth * 0.90);
+        windowHeight = (int)(browserHeight * 0.90);
     #endif
    
     /* Initialize the library */
