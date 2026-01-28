@@ -1445,5 +1445,6 @@
       <Filter>Header Files</Filter>
     </None>
     <None Include="res\shaders\Fluid.shader" />
+    <None Include="shell.html" />
   </ItemGroup>
 </Project>

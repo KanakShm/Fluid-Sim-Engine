@@ -11,7 +11,42 @@
 #include <array>
 #include <algorithm>
 #include <numeric>
-#include <execution>
+
+#ifndef __EMSCRIPTEN__
+	#include <execution>
+#endif
+
+namespace Utils {
+	template <typename Iterator, typename T>
+	void ParallelFill(Iterator begin, Iterator end, const T& val)
+	{
+#ifdef __EMSCRIPTEN__
+		std::fill(begin, end, val);
+#else
+		std::fill(std::execution::par_unseq, begin, end, val);
+#endif
+	}
+
+	template <typename Iterator, typename Func>
+	void ParallelForEach(Iterator begin, Iterator end, Func func)
+	{
+#ifdef __EMSCRIPTEN__
+		std::for_each(begin, end, func);
+#else
+		std::for_each(std::execution::par_unseq, begin, end, func);
+#endif
+	}
+
+	template <typename Iterator, typename Compare>
+	void ParallelSort(Iterator begin, Iterator end, Compare comp)
+	{
+#ifdef __EMSCRIPTEN__
+		std::sort(begin, end, comp);
+#else
+		std::sort(std::execution::par_unseq, begin, end, comp);
+#endif
+	}
+}
 
 constexpr float calculate_r6(float r) {
 	float r2 = r * r;
@@ -27,34 +62,38 @@ constexpr float calculate_r8(float r) {
 namespace PhysicsConstants {
 	static constexpr float PI = 3.1415926535f;
 
-	static float SMOOTHING_RADIUS = 0.16f;
-	static float MASS = 1.0f;
-	static float REST_DENSITY = 1415.0f;
-	static float VISCOCITY_COEFFICIENT = 0.016;
-	static float GASS_CONSTANT = 0.420f;
-	static float GRAVITY = 9.81f;
-	static float Poly6Kernal() {
+	inline static float SMOOTHING_RADIUS = 0.16f;
+	inline static float MASS = 1.0f;
+	inline static float REST_DENSITY = 1415.0f;
+	inline static float VISCOCITY_COEFFICIENT = 0.016;
+	inline static float GASS_CONSTANT = 0.420f;
+	inline static float GRAVITY = 9.81f;
+	inline static float Poly6Kernal() {
 		return 4.0f / (PhysicsConstants::PI * calculate_r8(PhysicsConstants::SMOOTHING_RADIUS));
 	}
-	static float SpikeyConstant() {
+	inline static float SpikeyConstant() {
 		return -45.0f / (PhysicsConstants::PI * calculate_r6(PhysicsConstants::SMOOTHING_RADIUS));
 	}
-	static float MullerConstant() {
+	inline static float MullerConstant() {
 		return 45.0f / (PhysicsConstants::PI * calculate_r6(PhysicsConstants::SMOOTHING_RADIUS));
 	}
 }
 
 namespace SimulationConstants {
+#if defined(__EMSCRIPTEN__)
 	static constexpr int NO_OF_PARTICLES = 2500;
+#else
+	static constexpr int NO_OF_PARTICLES = 2500;
+#endif
 	static constexpr int TABLE_SIZE = NO_OF_PARTICLES * 2;
 	static constexpr int PRIME1 = 98561123;
 	static constexpr int PRIME2 = 863421509;
 	static constexpr float SAFETY_FACTOR = 0.40f;
 
-	static float DAMPENING = -0.3f;
-	static float GRAB_RADIUS = 0.3f;
-	static float GRAB_STRENGTH = -12000.0f;
-	static bool USE_SPATIAL_HASHING = true;
+	inline static float DAMPENING = -0.3f;
+	inline static float GRAB_RADIUS = 0.3f;
+	inline static float GRAB_STRENGTH = -12000.0f;
+	inline static bool USE_SPATIAL_HASHING = true;
 	static float MaxSpeed() {
 		return PhysicsConstants::SMOOTHING_RADIUS* SAFETY_FACTOR / GlobalConstants::DT;
 	}

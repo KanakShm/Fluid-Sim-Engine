@@ -487,6 +487,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="res\shaders\Fluid.shader" />
+    <None Include="shell.html" />
     <None Include="src\vendor\glm\detail\func_common.inl" />
     <None Include="src\vendor\glm\detail\func_common_simd.inl" />
     <None Include="src\vendor\glm\detail\func_exponential.inl" />

@@ -78,7 +78,21 @@ unsigned int Shader::CreateShader(const std::string& vertexShader, const std::st
 unsigned int Shader::CompileShader(unsigned int type, const std::string& source)
 {
 	unsigned int id = glCreateShader(type);
-	const char* src = source.c_str();
+
+	std::string versionHeader;
+	#ifdef __EMSCRIPTEN__
+		// WebGL 2.0 (ES 3.0)
+		versionHeader = "#version 300 es\n";
+		// WebGL REQUIRES precision in fragment shaders
+		if (type == GL_FRAGMENT_SHADER)
+			versionHeader += "precision mediump float;\n";
+	#else
+		// Desktop OpenGL (Core 3.3)
+		versionHeader = "#version 330 core\n";
+	#endif
+
+	std::string finalSource = versionHeader + source;
+	const char* src = (finalSource).c_str();
 	glShaderSource(id, 1, &src, nullptr);
 	glCompileShader(id);
 

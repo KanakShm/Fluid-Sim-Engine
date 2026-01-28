@@ -5,8 +5,13 @@
 #include <iostream>
 
 namespace GlobalConstants {
+#if defined(__EMSCRIPTEN__)
+	static int WINDOW_HEIGHT = 900;
+	static int WINDOW_WIDTH = 1600;
+#else
 	static constexpr int WINDOW_HEIGHT = 900;
 	static constexpr int WINDOW_WIDTH = 1600;
+#endif
 	static constexpr float DT = 0.005;
 }
 

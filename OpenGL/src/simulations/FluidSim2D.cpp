@@ -60,8 +60,8 @@ namespace simulation {
 	void FluidSim2D::UpdateSpatialHashGrid()
 	{
 		// Rest and fill the spatial hash grid
-		std::fill(std::execution::par_unseq, spatialHash.begin(), spatialHash.end(), std::array<int, 2>{INT_MAX, INT_MAX});
-		std::for_each(std::execution::par_unseq, iter_idx.begin(), iter_idx.end(),
+		Utils::ParallelFill(spatialHash.begin(), spatialHash.end(), std::array<int, 2>{INT_MAX, INT_MAX});
+		Utils::ParallelForEach(iter_idx.begin(), iter_idx.end(),
 			[&](int i) {
 				const Particle& particle = particles[i];
 				int coord_x = std::floor((particle.position.x + 1) / PhysicsConstants::SMOOTHING_RADIUS);
@@ -76,11 +76,11 @@ namespace simulation {
 				spatialHash[i] = { grid_hash, i };
 			}
 		);
-		std::sort(std::execution::par_unseq, spatialHash.begin(), spatialHash.end(), std::less<std::array<int, 2>>());
+		Utils::ParallelSort(spatialHash.begin(), spatialHash.end(), std::less<std::array<int, 2>>());
 
 		// Reset and fill the indices grid
-		std::fill(std::execution::par_unseq, indices.begin(), indices.end(), -1);
-		std::for_each(std::execution::par_unseq, iter_idx.begin(), iter_idx.end(),
+		Utils::ParallelFill(indices.begin(), indices.end(), -1);
+		Utils::ParallelForEach(iter_idx.begin(), iter_idx.end(),
 			[&](int i) {
 				int prev_hash = i == 0 ? -1 : spatialHash[i - 1][0];
 
@@ -93,7 +93,7 @@ namespace simulation {
 	}
 
 	/*
-		Uses the spatial hash to compute the density of each particle.
+		Naively updates the density of each particle.
 	*/
 	void FluidSim2D::UpdateParticleDensity() 
 	{
@@ -121,7 +121,7 @@ namespace simulation {
 	{
 		float R2 = PhysicsConstants::SMOOTHING_RADIUS * PhysicsConstants::SMOOTHING_RADIUS;
 
-		std::for_each(std::execution::par_unseq, iter_idx.begin(), iter_idx.end(),
+		Utils::ParallelForEach(iter_idx.begin(), iter_idx.end(),
 			[&](int i) {
 				Particle& particle = particles[i];
 				particle.density = 0.0f;
@@ -170,7 +170,7 @@ namespace simulation {
 	*/
 	void FluidSim2D::UpdateParticlePressure() 
 	{
-		std::for_each(std::execution::par_unseq, iter_idx.begin(), iter_idx.end(), 
+		Utils::ParallelForEach(iter_idx.begin(), iter_idx.end(), 
 			[&](int i) {
 				Particle& particle = particles[i];
 				float density_ratio = particles[i].density / PhysicsConstants::REST_DENSITY;
@@ -184,7 +184,7 @@ namespace simulation {
 	}
 
 	/*
-		Calculates the force of pressure on each particle using Debrun's spiky kernel.
+		Naively calculates the force of pressure on each particle using Debrun's spiky kernel.
 	*/
 	void FluidSim2D::ComputeForces()
 	{
@@ -230,7 +230,7 @@ namespace simulation {
 	{
 		float R2 = PhysicsConstants::SMOOTHING_RADIUS * PhysicsConstants::SMOOTHING_RADIUS;
 
-		std::for_each(std::execution::par_unseq, iter_idx.begin(), iter_idx.end(),
+		Utils::ParallelForEach(iter_idx.begin(), iter_idx.end(),
 			[&](int i) {
 				Particle& particle = particles[i];
 				glm::vec2 f_pressure(0.0f);
@@ -356,7 +356,7 @@ namespace simulation {
 
 	void FluidSim2D::ResetForces()
 	{
-		std::for_each(std::execution::par_unseq, iter_idx.begin(), iter_idx.end(),
+		Utils::ParallelForEach(iter_idx.begin(), iter_idx.end(),
 			[&](int i)
 			{
 				Particle& particle = particles[i];
@@ -386,7 +386,7 @@ namespace simulation {
 			ComputeForces();
 		}
 
-		std::for_each(std::execution::par_unseq, particles.begin(), particles.end(), 
+		Utils::ParallelForEach(particles.begin(), particles.end(), 
 			[&](Particle& particle) {
 				glm::vec2 F_total = particle.F_pressure +
 									particle.F_viscosity +
