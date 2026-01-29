@@ -92,7 +92,7 @@ Porting a native C++ graphics application to the web required significant archit
 * **Loop Management:** Converted the blocking `while(!WindowShouldClose)` loop into an asynchronous callback system using `emscripten_set_main_loop` to prevent browser hanging.
 * **File System:** Embedded shader assets into the virtual file system (MEMFS) during the build process.
 
-## 🎠 Future Roadmap: GPGPU Acceleration
+## ⛰︎ Future Roadmap: GPGPU Acceleration
 
 While currently a high-performance C++ model, the architecture is designed for a seamless transition to a **GPGPU Compute Pipeline**:
 
