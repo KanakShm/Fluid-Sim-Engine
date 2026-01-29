@@ -68,31 +68,38 @@ $$
 \mathbf{f}_i^{viscosity} = \mu \sum_j m_j \frac{\mathbf{v}_j - \mathbf{v}_i}{\rho_j} \nabla^2 W_{viscosity}(\mathbf{r}_i - \mathbf{r}_j, h)
 $$
 
-## 💡 Key Implementation Details
+## 🛠 Technical Architecture
 
-### 1. OpenGL Rendering Pipeline
-Instead of using a pre-built game engine, I implemented a fixed-timestep physics loop. This ensures the simulation remains deterministic regardless of the frame rate.
-* **Batching:** Particle data is streamed to the GPU via **Vertex Buffer Objects (VBOs)** to minimize draw calls.
-* **Shaders:** Custom **GLSL** vertex and fragment shaders handle the colouring and rasterisation of fluid particles.
-* **State Management:** Encapsulated OpenGL state changes to prevent redundant driver calls.
+The engine is designed as a **Golden Reference** for high-throughput computing, prioritising data-oriented design and hardware efficiency over traditional object-oriented paradigms. It employs
+**Fixed-Step Integration** with a constant $\Delta t$ to ensure reproducible simulation results across different execution runs, a prerequisite for hardware-software co-verification.
+
+### 1. Memory Hierarchy & Data Layout
+To minimise memory latency and prepare for future GPGPU offloading, the engine utilises a **Structure of Arrays (SoA)** approach.
+* **Cache Locality:** By storing positions and velocities in contiguous primitive arrays, the engine maximizes L1/L2 cache hit rates during the integration pass.
+* **SIMD Readiness:** Data structures are explicitly designed for **16-byte alignment**, facilitating efficient 128-bit SIMD (Single Instruction, Multiple Data) load/store operations.
+
+### 2. Spatial Partitioning & Parallel Scalability
+The neighbourhood search—traditionally an $O(n^2)$ bottleneck—is optimised through a **Uniform Grid Spatial Hash**.
+* **Hardware-Aware Hashing:** The grid system is designed to be non-blocking, modelling the behaviour of **Atomic Operations** in a massively parallel environment.
+* **Workgroup Locality:** Particles are binned into spatial cells to minimise "pointer chasing" and simulate the localised data access patterns typical of **LDS (Local Data Share)** utilisation.
+
+https://github.com/user-attachments/assets/c6499686-5ad3-498f-a37a-2836ebec7d52
+
+The simulation includes a toggle for spatial hashing; turning it off results in a severe drop in frame rate. 
+
+## 🚀 Future Roadmap: GPGPU Acceleration
+
+While currently a high-performance C++ model, the architecture is designed for a seamless transition to a **GPGPU Compute Pipeline**:
+
+1.  **Offload Pass:** Transitioning the SPH kernels to **OpenGL 4.6 Compute Shaders**.
+2.  **Shared Memory Optimization:** Implementing **LDS (Local Data Share)** caching to reduce VRAM pressure during neighbor searches.
+3.  **Occupancy Tuning:** Analyzing **Wavefront occupancy** and SIMD divergence using the **AMD Radeon GPU Profiler (RGP)**.
+
 
 ### 3. WebAssembly Porting Strategy
 Porting a native C++ graphics application to the web required significant architectural refactoring:
 * **Loop Management:** Converted the blocking `while(!WindowShouldClose)` loop into an asynchronous callback system using `emscripten_set_main_loop` to prevent browser hanging.
 * **File System:** Embedded shader assets into the virtual file system (MEMFS) during the build process.
-
-## 📊 Optimisation Algorithms
-To optimise the solver, the **Spatial Hashing** algorithm is used to bring the total time complexity of density and force calculations from $\mathbf{O(n^2)}$ to $\mathbf{O(n)}$. The simulation
-includes a toggle for spatial hashing; turning it off results in a severe drop in frame rate. 
-
-https://github.com/user-attachments/assets/c6499686-5ad3-498f-a37a-2836ebec7d52
-
-To further decrease solve times, the program has been multithreaded wherever possible. Along with
-this, smart decisions about how the code is written allow the program to run as fast as possible. These include, but are not limited to:
-* Efficient use of variables like `static constexpr`
-* optimising the hot path to avoid `new/delete` allocations during the render loop,
-* Minimising the use of square roots
-* Other
 
 ## 🔧 Build Instructions
 
