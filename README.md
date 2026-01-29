@@ -10,7 +10,7 @@ and cross-platform compilation (Native Windows & WebAssembly).
 
 ---
 
-## 🛠️ Tech Stack & Architecture
+## 🏛️ Tech Stack
 
 * **Language:** C++17 (STL, Smart Pointers, Templates)
 * **Graphics API:** OpenGL 3.3 (Native) / OpenGL ES 3.0 (Web)
@@ -68,7 +68,7 @@ $$
 \mathbf{f}_i^{viscosity} = \mu \sum_j m_j \frac{\mathbf{v}_j - \mathbf{v}_i}{\rho_j} \nabla^2 W_{viscosity}(\mathbf{r}_i - \mathbf{r}_j, h)
 $$
 
-## 🤓 Technical Architecture
+## 🛠️ Technical Architecture
 
 The engine is designed as a **Golden Reference** for high-throughput computing, prioritising data-oriented design and hardware efficiency over traditional object-oriented paradigms. It employs
 **Fixed-Step Integration** with a constant $\Delta t$ to ensure reproducible simulation results across different execution runs, a prerequisite for hardware-software co-verification.
