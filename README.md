@@ -3,7 +3,7 @@
 ![OpenGL](https://img.shields.io/badge/OpenGL-%23FFFFFF.svg?style=for-the-badge&logo=opengl)
 ![WebAssembly](https://img.shields.io/badge/WebAssembly-654FF0?style=for-the-badge&logo=webassembly&logoColor=white)
 
-### [🚀 TRY THE LIVE DEMO](https://kanakshm.github.io/Fluid-Sim-Engine/)
+### [🚀 TRY THE FLUID SIMULATION ENGINE](https://kanakshm.github.io/Fluid-Sim-Engine/)
 
 A high-performance 2D fluid physics engine built from scratch in **C++17** and **OpenGL**. The project demonstrates low-level systems programming, graphics pipeline management, 
 and cross-platform compilation (Native Windows & WebAssembly).
@@ -27,13 +27,16 @@ $$\frac{\partial \mathbf{u}}{\partial t} = -(\mathbf{u} \cdot \nabla) \mathbf{u}
 $$\nabla \cdot \mathbf{u} = 0$$
 
 #### Numerical Solver Stages:
-1.  **Pressure and Density (Semi-Lagrangian Scheme):**  
 #### A. Density Estimation (Poly6 Kernel)
 Density is computed by summing neighbour contributions using the smooth **Poly6 Kernel**.
-$$\rho_i = \sum_j m_j W_{poly6}(\mathbf{r}_i - \mathbf{r}_j, h)$$
+
+$$
+\rho_i = \sum_j m_j W_{poly6}(\mathbf{r}_i - \mathbf{r}_j, h)
+$$
 
 #### B. Pressure Calculation (Tait Equation of State)
 To simulate a liquid rather than a gas, I use the Tait equation. This stiff equation of state rapidly increases pressure as density deviates from the rest density, resisting compression.
+
 $$p_i = \max \left( k \left[ \left( \frac{\rho_i}{\rho_0} \right)^7 - 1 \right], 0 \right)$$
 
 * **$\rho_0$**: Rest density.
@@ -42,7 +45,10 @@ $$p_i = \max \left( k \left[ \left( \frac{\rho_i}{\rho_0} \right)^7 - 1 \right],
 
 #### C. Pressure Force (Spiky Kernel Gradient)
 The pressure gradient is computed using the **Spiky Kernel** to prevent particle clustering (tensile instability) at the kernel centre.
-$$\mathbf{f}_i^{pressure} = -\sum_j m_j \frac{p_i + p_j}{2\rho_j} \nabla W_{spiky}(\mathbf{r}_i - \mathbf{r}_j, h)$$
+
+$$
+\mathbf{f}_i^{pressure} = -\sum_j m_j \frac{p_i + p_j}{2\rho_j} \nabla W_{spiky}(\mathbf{r}_i - \mathbf{r}_j, h)
+$$
 
 #### D. Viscosity Force (Viscosity Kernel Laplacian)
 Viscosity dampens velocity differences using the positive-definite Laplacian of the Viscosity Kernel.
