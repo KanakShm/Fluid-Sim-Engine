@@ -96,9 +96,11 @@ Porting a native C++ graphics application to the web required significant archit
 
 While currently a high-performance C++ model, the architecture is designed for a seamless transition to a **GPGPU Compute Pipeline**:
 
-1.  **Offload Pass:** Transitioning the SPH kernels to **OpenGL 4.6 Compute Shaders**.
-2.  **Shared Memory Optimization:** Implementing **LDS (Local Data Share)** caching to reduce VRAM pressure during neighbor searches.
-3.  **Occupancy Tuning:** Analyzing **Wavefront occupancy** and SIMD divergence using the **AMD Radeon GPU Profiler (RGP)**.
+1. **Cache Locality:** To be improved further.
+2. **SIMD Readiness:** To be improved further.
+3. **Offload Pass:** Transitioning the SPH kernels to **OpenGL 4.6 Compute Shaders**.
+4. **Shared Memory Optimization:** Implementing **LDS (Local Data Share)** caching to reduce VRAM pressure during neighbor searches.
+5. **Occupancy Tuning:** Analyzing **Wavefront occupancy** and SIMD divergence using the **AMD Radeon GPU Profiler (RGP)**.
 
 ## 🔧 Build Instructions
 
