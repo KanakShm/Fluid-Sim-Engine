@@ -23,10 +23,21 @@ and cross-platform compilation (Native Windows & WebAssembly).
 The engine solves the **Incompressible Navier-Stokes equations** for 2D fluid flow on an Eulerian grid. The simulation is based on the [Particle-Based Fluid Simulation for 
 Interactive Applications](https://matthias-research.github.io/pages/publications/sca03.pdf) paper by Matthias Müller, David Charypar and Markus Gross.
 
-$$\frac{\partial \mathbf{u}}{\partial t} = -(\mathbf{u} \cdot \nabla) \mathbf{u} + \nu \nabla^2 \mathbf{u} - \nabla p + \mathbf{f}$$
-$$\nabla \cdot \mathbf{u} = 0$$
+$$
+\rho \left( \frac{\partial \mathbf{u}}{\partial t} + (\mathbf{u} \cdot \nabla) \mathbf{u} \right) = -\nabla p + \mu \nabla^2 \mathbf{u} + \mathbf{f}
+$$
 
-#### Numerical Solver Stages:
+$$
+\nabla \cdot \mathbf{u} = 0
+$$
+
+**Where:**
+* **$\rho$ (Rho):** Fluid density.
+* **$\mathbf{u}$:** Velocity vector field.
+* **$p$:** Pressure.
+* **$\mu$ (Mu):** Dynamic viscosity coefficient.
+* **$\mathbf{f}$:** External body forces (e.g., gravity).
+
 #### A. Density Estimation (Poly6 Kernel)
 Density is computed by summing neighbour contributions using the smooth **Poly6 Kernel**.
 
@@ -35,7 +46,7 @@ $$
 $$
 
 #### B. Pressure Calculation (Tait Equation of State)
-To simulate a liquid rather than a gas, I use the Tait equation. This stiff equation of state rapidly increases pressure as density deviates from the rest density, resisting compression.
+To simulate a liquid rather than a gas, I used the Tait equation. This stiff equation of state rapidly increases pressure as density deviates from the rest density, resisting compression.
 
 $$p_i = \max \left( k \left[ \left( \frac{\rho_i}{\rho_0} \right)^7 - 1 \right], 0 \right)$$
 
@@ -52,7 +63,10 @@ $$
 
 #### D. Viscosity Force (Viscosity Kernel Laplacian)
 Viscosity dampens velocity differences using the positive-definite Laplacian of the Viscosity Kernel.
-$$\mathbf{f}_i^{viscosity} = \mu \sum_j m_j \frac{\mathbf{v}_j - \mathbf{v}_i}{\rho_j} \nabla^2 W_{viscosity}(\mathbf{r}_i - \mathbf{r}_j, h)$$
+
+$$
+\mathbf{f}_i^{viscosity} = \mu \sum_j m_j \frac{\mathbf{v}_j - \mathbf{v}_i}{\rho_j} \nabla^2 W_{viscosity}(\mathbf{r}_i - \mathbf{r}_j, h)
+$$
 
 ## 💡 Key Implementation Details
 
@@ -68,7 +82,7 @@ Porting a native C++ graphics application to the web required significant archit
 * **File System:** Embedded shader assets into the virtual file system (MEMFS) during the build process.
 
 ## 📊 Optimisation Algorithms
-To optimise the solver, the **Spatial Hashing** algorithm is used to bring the total time complexity of density and force calculations from $$\mathbf{O(n^2)$$ to $$\mathbf{O(n)$$. The simulation
+To optimise the solver, the **Spatial Hashing** algorithm is used to bring the total time complexity of density and force calculations from $\mathbf{O(n^2)}$ to $\mathbf{O(n)}$. The simulation
 includes a toggle for spatial hashing; turning it off results in a severe drop in frame rate. To further decrease solve times, the program has been multithreaded wherever possible. Along with
 this, smart decisions about how the code is written allow the program to run as fast as possible. These include, but are not limited to:
 * Efficient use of variables like `static constexpr`
