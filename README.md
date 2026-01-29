@@ -83,7 +83,11 @@ Porting a native C++ graphics application to the web required significant archit
 
 ## 📊 Optimisation Algorithms
 To optimise the solver, the **Spatial Hashing** algorithm is used to bring the total time complexity of density and force calculations from $\mathbf{O(n^2)}$ to $\mathbf{O(n)}$. The simulation
-includes a toggle for spatial hashing; turning it off results in a severe drop in frame rate. To further decrease solve times, the program has been multithreaded wherever possible. Along with
+includes a toggle for spatial hashing; turning it off results in a severe drop in frame rate. 
+
+https://github.com/user-attachments/assets/c6499686-5ad3-498f-a37a-2836ebec7d52
+
+To further decrease solve times, the program has been multithreaded wherever possible. Along with
 this, smart decisions about how the code is written allow the program to run as fast as possible. These include, but are not limited to:
 * Efficient use of variables like `static constexpr`
 * optimising the hot path to avoid `new/delete` allocations during the render loop,
