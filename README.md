@@ -24,7 +24,7 @@ The engine solves the **Incompressible Navier-Stokes equations** for 2D fluid fl
 Interactive Applications](https://matthias-research.github.io/pages/publications/sca03.pdf) paper by Matthias Müller, David Charypar and Markus Gross.
 
 $$
-\rho \left( \frac{\partial \mathbf{u}}{\partial t} + (\mathbf{u} \cdot \nabla) \mathbf{u} \right) = -\nabla p + \mu \nabla^2 \mathbf{u} + \mathbf{f}
+\frac{\partial \mathbf{u}}{\partial t} = -(\mathbf{u} \cdot \nabla) \mathbf{u} - \frac{1}{\rho} \nabla p + \frac{\mu}{\rho} \nabla^2 \mathbf{u} + \frac{\mathbf{f}}{\rho}
 $$
 
 $$
