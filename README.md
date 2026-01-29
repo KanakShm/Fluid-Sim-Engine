@@ -79,7 +79,7 @@ To minimise memory latency and prepare for future GPGPU offloading, the engine u
 * **SIMD Readiness:** Data structures are explicitly designed for **16-byte alignment**, facilitating efficient 128-bit SIMD (Single Instruction, Multiple Data) load/store operations.
 
 ### 2. Spatial Partitioning & Parallel Scalability
-The neighbourhood search—traditionally an $O(n^2)$ bottleneck—is optimised through a **Uniform Grid Spatial Hash**.
+The neighbourhood search, traditionally an $O(n^2)$ bottleneck, is optimised through a **Uniform Grid Spatial Hash**.
 * **Hardware-Aware Hashing:** The grid system is designed to be non-blocking, modelling the behaviour of **Atomic Operations** in a massively parallel environment.
 * **Workgroup Locality:** Particles are binned into spatial cells to minimise "pointer chasing" and simulate the localised data access patterns typical of **LDS (Local Data Share)** utilisation.
 
