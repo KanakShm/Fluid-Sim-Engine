@@ -453,7 +453,7 @@ namespace simulation {
 			array_offset,
 			NULL,
 			0.0f,  // Min Y-axis
-			50.0f, // Max Y-axis
+			100.0f, // Max Y-axis
 			ImVec2(0, 80.0f) // Graph Size (0 = full width, 80px height)
 		);
 
@@ -466,6 +466,10 @@ namespace simulation {
 		ImGui::SliderFloat("Volume of each drop (m^2)", &PhysicsConstants::MASS, 0.25f, 1.5f);
 		ImGui::SliderFloat("Gravity (m/s^2)", &PhysicsConstants::GRAVITY, 1.0f, 25.0f);
 		ImGui::SliderFloat("Wall Damping", &SimulationConstants::DAMPENING, -1.0f, 1.0f);
+
+		#ifndef __EMSCRIPTEN__
+			ImGui::SliderFloat("Smoothing Radius", &PhysicsConstants::SMOOTHING_RADIUS, 0.05f, 3.0f);
+		#endif
 		ImGui::Separator();
 
 		ImGui::SliderFloat("Grab Radius", &SimulationConstants::GRAB_RADIUS, 0.1f, 1.0f);

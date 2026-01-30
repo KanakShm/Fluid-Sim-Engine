@@ -85,6 +85,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>src;$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)OpenGL\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)OpenGL\src\vendor</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>Disabled</Optimization>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -104,6 +105,7 @@
       <LanguageStandard>stdcpp20</LanguageStandard>
       <AdditionalIncludeDirectories>src;$(SolutionDir)Dependencies\GLFW\include;$(SolutionDir)OpenGL\include;$(SolutionDir)Dependencies\GLEW\include;$(SolutionDir)OpenGL\src\vendor</AdditionalIncludeDirectories>
       <MultiProcessorCompilation>true</MultiProcessorCompilation>
+      <Optimization>Disabled</Optimization>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
