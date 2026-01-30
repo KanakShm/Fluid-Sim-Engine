@@ -466,7 +466,6 @@ namespace simulation {
 		ImGui::SliderFloat("Volume of each drop (m^2)", &PhysicsConstants::MASS, 0.25f, 1.5f);
 		ImGui::SliderFloat("Gravity (m/s^2)", &PhysicsConstants::GRAVITY, 1.0f, 25.0f);
 		ImGui::SliderFloat("Wall Damping", &SimulationConstants::DAMPENING, -1.0f, 1.0f);
-		ImGui::SliderFloat("Smoothing Radius", &PhysicsConstants::SMOOTHING_RADIUS, 0.05f, 3.0f);
 		ImGui::Separator();
 
 		ImGui::SliderFloat("Grab Radius", &SimulationConstants::GRAB_RADIUS, 0.1f, 1.0f);
