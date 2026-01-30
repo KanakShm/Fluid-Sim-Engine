@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.10)
 project(SimulationEngine)
 
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -s USE_GLFW=3 -s USE_WEBGL2=1 -s FULL_ES3=1 -s WASM=1 -s ALLOW_MEMORY_GROWTH=1")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++17 -s USE_GLFW=3 -s USE_WEBGL2=1 -s FULL_ES3=1 -s WASM=1 -s ALLOW_MEMORY_GROWTH=1 -O3")
 set(CMAKE_EXECUTABLE_SUFFIX ".html")
 
 file(GLOB IMGUI_CORE "src/vendor/imgui/*.cpp")

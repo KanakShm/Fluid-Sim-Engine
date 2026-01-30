@@ -74,9 +74,7 @@ void MainLoop(void* arg)
         state->currentSimulation->OnRender();
 
         // ImGui Logic
-        #ifdef __EMSCRIPTEN__
-            ImGui::SetNextWindowSize(ImVec2(400, 370), ImGuiCond_Always);
-        #endif
+        ImGui::SetNextWindowSize(ImVec2(400, 370), ImGuiCond_Always);
         ImGui::Begin("Fluid Simulation");
 
         if (state->currentSimulation != state->simulationMenu && ImGui::Button("<-"))
