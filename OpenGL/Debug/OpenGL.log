@@ -1,29 +1,7 @@
 ﻿  Scanning sources for module dependencies...
   Application.cpp
-  FluidSim2D.cpp
-  Simulation.cpp
-  TestClearColour.cpp
-  TestTexture2D.cpp
-C:\Users\kanak\Dev\OpenGL\OpenGL\src\simulations\Simulation.h(15,28): warning C4305: 'initializing': truncation from 'double' to 'const float'
-  (compiling source file 'src/simulations/TestClearColour.cpp')
-  
-C:\Users\kanak\Dev\OpenGL\OpenGL\src\simulations\Simulation.h(15,28): warning C4305: 'initializing': truncation from 'double' to 'const float'
-  (compiling source file 'src/simulations/Simulation.cpp')
-  
-C:\Users\kanak\Dev\OpenGL\OpenGL\src\simulations\Simulation.h(15,28): warning C4305: 'initializing': truncation from 'double' to 'const float'
-  (compiling source file 'src/simulations/TestTexture2D.cpp')
-  
-C:\Users\kanak\Dev\OpenGL\OpenGL\src\simulations\Simulation.h(15,28): warning C4305: 'initializing': truncation from 'double' to 'const float'
-  (compiling source file 'src/simulations/FluidSim2D.cpp')
-  
 C:\Users\kanak\Dev\OpenGL\OpenGL\src\simulations\Simulation.h(15,28): warning C4305: 'initializing': truncation from 'double' to 'const float'
   (compiling source file 'src/Application.cpp')
-  
-C:\Users\kanak\Dev\OpenGL\OpenGL\src\simulations\FluidSim2D.h(68,44): warning C4305: 'initializing': truncation from 'double' to 'float'
-  (compiling source file 'src/simulations/FluidSim2D.cpp')
-  
-C:\Users\kanak\Dev\OpenGL\OpenGL\src\simulations\FluidSim2D.h(107,27): warning C4244: 'initializing': conversion from 'float' to 'const int', possible loss of data
-  (compiling source file 'src/simulations/FluidSim2D.cpp')
   
 C:\Users\kanak\Dev\OpenGL\OpenGL\src\simulations\FluidSim2D.h(68,44): warning C4305: 'initializing': truncation from 'double' to 'float'
   (compiling source file 'src/Application.cpp')
@@ -33,21 +11,4 @@ C:\Users\kanak\Dev\OpenGL\OpenGL\src\simulations\FluidSim2D.h(107,27): warning C
   
 C:\Users\kanak\Dev\OpenGL\OpenGL\src\Application.cpp(52,25): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
 C:\Users\kanak\Dev\OpenGL\OpenGL\src\Application.cpp(151,36): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
-C:\Users\kanak\Dev\OpenGL\OpenGL\src\simulations\FluidSim2D.cpp(12,71): warning C4244: 'initializing': conversion from 'double' to 'float', possible loss of data
-C:\Users\kanak\Dev\OpenGL\OpenGL\src\simulations\FluidSim2D.cpp(67,17): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\Users\kanak\Dev\OpenGL\OpenGL\src\simulations\FluidSim2D.cpp(68,17): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\Users\kanak\Dev\OpenGL\OpenGL\src\simulations\FluidSim2D.cpp(103,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\kanak\Dev\OpenGL\OpenGL\src\simulations\FluidSim2D.cpp(107,22): warning C4018: '<': signed/unsigned mismatch
-C:\Users\kanak\Dev\OpenGL\OpenGL\src\simulations\FluidSim2D.cpp(130,17): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\Users\kanak\Dev\OpenGL\OpenGL\src\simulations\FluidSim2D.cpp(131,17): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\Users\kanak\Dev\OpenGL\OpenGL\src\simulations\FluidSim2D.cpp(147,36): warning C4018: '<': signed/unsigned mismatch
-C:\Users\kanak\Dev\OpenGL\OpenGL\src\simulations\FluidSim2D.cpp(192,21): warning C4018: '<': signed/unsigned mismatch
-C:\Users\kanak\Dev\OpenGL\OpenGL\src\simulations\FluidSim2D.cpp(197,22): warning C4018: '<': signed/unsigned mismatch
-C:\Users\kanak\Dev\OpenGL\OpenGL\src\simulations\FluidSim2D.cpp(240,17): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\Users\kanak\Dev\OpenGL\OpenGL\src\simulations\FluidSim2D.cpp(241,17): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\Users\kanak\Dev\OpenGL\OpenGL\src\simulations\FluidSim2D.cpp(257,30): warning C4018: '<': signed/unsigned mismatch
-C:\Users\kanak\Dev\OpenGL\OpenGL\src\simulations\FluidSim2D.cpp(317,21): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\Users\kanak\Dev\OpenGL\OpenGL\src\simulations\FluidSim2D.cpp(320,16): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\Users\kanak\Dev\OpenGL\OpenGL\src\simulations\FluidSim2D.cpp(321,16): warning C4244: 'initializing': conversion from 'float' to 'int', possible loss of data
-C:\Users\kanak\Dev\OpenGL\OpenGL\src\simulations\FluidSim2D.cpp(337,29): warning C4018: '<': signed/unsigned mismatch
   OpenGL.vcxproj -> C:\Users\kanak\Dev\OpenGL\Debug\OpenGL.exe

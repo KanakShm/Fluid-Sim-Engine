@@ -169,7 +169,7 @@ int main(void)
         app.simulationMenu = new simulation::SimulationMenu(app.currentSimulation);
         app.currentSimulation = app.simulationMenu;
 
-        app.simulationMenu->RegisterSimulation<simulation::FluidSim2D>("Fluid Simulation");
+        app.simulationMenu->RegisterSimulation<simulation::FluidSim2D>("Start");
 
         // --- THE MAIN LOOP SWITCH ---
         #ifdef __EMSCRIPTEN__
